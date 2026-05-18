@@ -11,13 +11,34 @@ class VehicleController extends Controller
     {
         $query = auth()->user()->vehicles()->with('serviceRecords');
 
+        // Search filter
         if ($request->has('search')) {
             $query->search($request->search);
         }
 
+        // Make filter
+        if ($request->has('make') && $request->make) {
+            $query->filterByMake($request->make);
+        }
+
+        // Year filter
+        if ($request->has('year') && $request->year) {
+            $query->filterByYear($request->year);
+        }
+
+        // Fuel type filter
+        if ($request->has('fuel_type') && $request->fuel_type) {
+            $query->filterByFuelType($request->fuel_type);
+        }
+
         $vehicles = $query->latest()->paginate(10);
 
-        return view('vehicles.index', compact('vehicles'));
+        // Get unique makes and years for filter dropdowns
+        $makes = auth()->user()->vehicles()->distinct()->pluck('make')->sort()->values();
+        $years = auth()->user()->vehicles()->distinct()->pluck('year')->sort()->values();
+        $fuelTypes = auth()->user()->vehicles()->distinct()->pluck('fuel_type')->filter()->sort()->values();
+
+        return view('vehicles.index', compact('vehicles', 'makes', 'years', 'fuelTypes'));
     }
 
     public function create()
@@ -35,6 +56,8 @@ class VehicleController extends Controller
             'number_plate' => 'required|string|max:255|unique:vehicles,number_plate',
             'color' => 'nullable|string|max:255',
             'mileage' => 'nullable|numeric|min:0',
+            'fuel_type' => 'nullable|string|max:50',
+            'vin_number' => 'nullable|string|max:17',
         ]);
 
         Vehicle::create([
@@ -46,6 +69,8 @@ class VehicleController extends Controller
             'number_plate' => $request->number_plate,
             'color' => $request->color,
             'mileage' => $request->mileage,
+            'fuel_type' => $request->fuel_type,
+            'vin_number' => $request->vin_number,
         ]);
 
         return redirect()->route('vehicles.index')->with('success', 'Vehicle created successfully.');
@@ -78,6 +103,8 @@ class VehicleController extends Controller
             'number_plate' => 'required|string|max:255|unique:vehicles,number_plate,' . $vehicle->id,
             'color' => 'nullable|string|max:255',
             'mileage' => 'nullable|numeric|min:0',
+            'fuel_type' => 'nullable|string|max:50',
+            'vin_number' => 'nullable|string|max:17',
         ]);
 
         $vehicle->update([
@@ -88,6 +115,8 @@ class VehicleController extends Controller
             'number_plate' => $request->number_plate,
             'color' => $request->color,
             'mileage' => $request->mileage,
+            'fuel_type' => $request->fuel_type,
+            'vin_number' => $request->vin_number,
         ]);
 
         return redirect()->route('vehicles.index')->with('success', 'Vehicle updated successfully.');

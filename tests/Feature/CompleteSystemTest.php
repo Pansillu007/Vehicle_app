@@ -126,7 +126,7 @@ class CompleteSystemTest extends TestCase
     public function test_user_can_view_service_records()
     {
         $user = User::factory()->create();
-        Sanctum::actingAs($user);
+        $this->actingAs($user);
 
         $vehicle = Vehicle::factory()->create(['user_id' => $user->id]);
         ServiceRecord::factory()->create(['vehicle_id' => $vehicle->id]);
