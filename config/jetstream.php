@@ -60,7 +60,11 @@ return [
     'features' => [
         // Features::termsAndPrivacyPolicy(),
         // Features::profilePhotos(),
+<<<<<<< HEAD
         // Features::api(),
+=======
+        Features::api(),
+>>>>>>> ec6237d (Third Week of Assignment small changes)
         // Features::teams(['invitations' => true]),
         Features::accountDeletion(),
     ],

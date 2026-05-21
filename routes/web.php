@@ -1,14 +1,27 @@
 <?php
 
+<<<<<<< HEAD
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\ServiceRecordController;
+=======
+use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\Admin\AdminVehicleController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\PdfExportController;
+use App\Http\Controllers\ServiceRecordController;
+use App\Http\Controllers\TrashController;
+use App\Http\Controllers\VehicleController;
+use Illuminate\Support\Facades\Route;
+>>>>>>> ec6237d (Third Week of Assignment small changes)
 
 Route::get('/', function () {
     return view('welcome');
 });
 
 Route::middleware([
+<<<<<<< HEAD
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
@@ -100,4 +113,34 @@ Route::middleware([
 
     Route::resource('vehicles', VehicleController::class);
     Route::resource('vehicles.services', ServiceRecordController::class);
+=======
+    'auth',
+    config('jetstream.auth_session'),
+])->group(function () {
+    Route::get('/dashboard', [VehicleController::class, 'dashboard'])->name('dashboard');
+
+    Route::resource('vehicles', VehicleController::class);
+    Route::resource('vehicles.services', ServiceRecordController::class)->scoped();
+
+    Route::get('/vehicles/{vehicle}/export', [PdfExportController::class, 'vehicleReport'])->name('vehicles.export');
+    Route::get('/vehicles/{vehicle}/services/export', [PdfExportController::class, 'serviceHistory'])->name('vehicles.services.export');
+    Route::get('/vehicles/{vehicle}/services/{service}/invoice', [PdfExportController::class, 'serviceInvoice'])->name('vehicles.services.invoice');
+
+    Route::get('/trash', [TrashController::class, 'index'])->name('trash.index');
+    Route::post('/trash/vehicles/{id}/restore', [TrashController::class, 'restoreVehicle'])->name('trash.vehicles.restore');
+    Route::delete('/trash/vehicles/{id}', [TrashController::class, 'forceDeleteVehicle'])->name('trash.vehicles.force-delete');
+    Route::post('/trash/services/{id}/restore', [TrashController::class, 'restoreService'])->name('trash.services.restore');
+    Route::delete('/trash/services/{id}', [TrashController::class, 'forceDeleteService'])->name('trash.services.force-delete');
+
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+    Route::post('/notifications/read-all', [NotificationController::class, 'markAllRead'])->name('notifications.read-all');
+
+    Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
+        Route::delete('/users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
+        Route::get('/vehicles', [AdminVehicleController::class, 'index'])->name('vehicles.index');
+    });
+>>>>>>> ec6237d (Third Week of Assignment small changes)
 });

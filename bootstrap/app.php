@@ -13,7 +13,11 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
+<<<<<<< HEAD
             'role' => \App\Http\Middleware\CheckRole::class,
+=======
+            'admin' => \App\Http\Middleware\EnsureUserIsAdmin::class,
+>>>>>>> ec6237d (Third Week of Assignment small changes)
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

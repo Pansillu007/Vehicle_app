@@ -1,4 +1,5 @@
 <x-app-layout>
+<<<<<<< HEAD
     <div class="py-8">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             
@@ -222,6 +223,51 @@
                 </div>
             </div>
 
+=======
+    <x-slot name="header">
+        <div class="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4">
+            <div class="flex items-center gap-4">
+                <img src="{{ $vehicle->image_url }}" alt="" class="w-16 h-16 rounded-2xl object-cover ring-2 ring-blue-500/30 hidden sm:block">
+                <div>
+                    <h2 class="page-header-title">{{ $vehicle->name }}</h2>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ $vehicle->make }} {{ $vehicle->model }} · {{ $vehicle->number_plate }}</p>
+                </div>
+            </div>
+            <div class="flex flex-wrap gap-2">
+                <a href="{{ route('vehicles.export', $vehicle) }}" class="btn-secondary text-sm py-2.5">Export PDF</a>
+                <a href="{{ route('vehicles.services.export', $vehicle) }}" class="btn-secondary text-sm py-2.5">Services PDF</a>
+                <a href="{{ route('vehicles.services.create', $vehicle) }}" class="btn-primary text-sm py-2.5">Add Service</a>
+                <a href="{{ route('vehicles.edit', $vehicle) }}" class="btn-secondary text-sm py-2.5">Edit</a>
+            </div>
+        </div>
+    </x-slot>
+
+    <div class="page-container">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+
+            @if($vehicle->next_service_due_date || $vehicle->next_service_due_mileage)
+            <div class="glass-card rounded-3xl p-5 border-l-4 border-amber-500">
+                <p class="text-sm font-semibold text-amber-600 dark:text-amber-400">Service schedule</p>
+                <p class="text-gray-700 dark:text-gray-300 mt-1">
+                    @if($vehicle->next_service_due_date) Next due: {{ $vehicle->next_service_due_date->format('M d, Y') }} @endif
+                    @if($vehicle->next_service_due_mileage) · Mileage target: {{ number_format($vehicle->next_service_due_mileage) }} @endif
+                </p>
+            </div>
+            @endif
+
+            <div class="glass-card rounded-3xl p-6 sm:p-8">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <div><p class="text-sm text-gray-500">Make & Model</p><p class="font-semibold text-gray-900 dark:text-white">{{ $vehicle->make }} {{ $vehicle->model }}</p></div>
+                    <div><p class="text-sm text-gray-500">Year</p><p class="font-semibold text-gray-900 dark:text-white">{{ $vehicle->year }}</p></div>
+                    <div><p class="text-sm text-gray-500">Color</p><p class="font-semibold text-gray-900 dark:text-white">{{ $vehicle->color }}</p></div>
+                    <div><p class="text-sm text-gray-500">Mileage</p><p class="font-semibold text-gray-900 dark:text-white">{{ number_format($vehicle->mileage) }}</p></div>
+                    <div><p class="text-sm text-gray-500">Fuel</p><p class="font-semibold text-gray-900 dark:text-white">{{ $vehicle->fuel_type }}</p></div>
+                    <div class="col-span-2"><p class="text-sm text-gray-500">VIN</p><p class="font-semibold font-mono text-gray-900 dark:text-white">{{ $vehicle->vin_number ?: 'N/A' }}</p></div>
+                </div>
+            </div>
+
+            <livewire:vehicle-services :vehicle="$vehicle" />
+>>>>>>> ec6237d (Third Week of Assignment small changes)
         </div>
     </div>
 </x-app-layout>

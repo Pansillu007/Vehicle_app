@@ -2,7 +2,11 @@
 
 namespace Database\Factories;
 
+<<<<<<< HEAD
 use App\Models\Team;
+=======
+use App\Enums\UserRole;
+>>>>>>> ec6237d (Third Week of Assignment small changes)
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -36,6 +40,10 @@ class UserFactory extends Factory
             'remember_token' => Str::random(10),
             'profile_photo_path' => null,
             'current_team_id' => null,
+<<<<<<< HEAD
+=======
+            'role' => UserRole::User,
+>>>>>>> ec6237d (Third Week of Assignment small changes)
         ];
     }
 

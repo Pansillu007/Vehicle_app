@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+<<<<<<< HEAD
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Vehicle extends Model
@@ -13,18 +14,34 @@ class Vehicle extends Model
     {
         return \Database\Factories\VehicleFactory::new();
     }
+=======
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
+
+class Vehicle extends Model
+{
+    use SoftDeletes;
+>>>>>>> ec6237d (Third Week of Assignment small changes)
 
     protected $fillable = [
         'user_id',
         'name',
         'make',
         'model',
+<<<<<<< HEAD
         'year',
         'number_plate',
+=======
+        'number_plate',
+        'year',
+>>>>>>> ec6237d (Third Week of Assignment small changes)
         'color',
         'mileage',
         'fuel_type',
         'vin_number',
+<<<<<<< HEAD
     ];
 
     protected $casts = [
@@ -33,15 +50,35 @@ class Vehicle extends Model
     ];
 
     public function user()
+=======
+        'image_path',
+        'next_service_due_date',
+        'next_service_due_mileage',
+    ];
+
+    protected function casts(): array
+    {
+        return [
+            'next_service_due_date' => 'date',
+        ];
+    }
+
+    public function user(): BelongsTo
+>>>>>>> ec6237d (Third Week of Assignment small changes)
     {
         return $this->belongsTo(User::class);
     }
 
+<<<<<<< HEAD
     public function serviceRecords()
+=======
+    public function serviceRecords(): HasMany
+>>>>>>> ec6237d (Third Week of Assignment small changes)
     {
         return $this->hasMany(ServiceRecord::class);
     }
 
+<<<<<<< HEAD
     public function scopeSearch($query, $search)
     {
         return $query->where('name', 'like', "%{$search}%")
@@ -118,5 +155,24 @@ class Vehicle extends Model
     public function getLastService()
     {
         return $this->serviceRecords()->latest()->first();
+=======
+    public function services(): HasMany
+    {
+        return $this->serviceRecords();
+    }
+
+    public function getImageUrlAttribute(): string
+    {
+        if ($this->image_path && Storage::disk('public')->exists($this->image_path)) {
+            return Storage::disk('public')->url($this->image_path);
+        }
+
+        return asset('images/vehicle-placeholder.svg');
+    }
+
+    public function totalMaintenanceCost(): float
+    {
+        return (float) $this->serviceRecords()->sum('cost');
+>>>>>>> ec6237d (Third Week of Assignment small changes)
     }
 }

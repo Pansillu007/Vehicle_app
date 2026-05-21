@@ -7,9 +7,16 @@
     "license": "MIT",
     "require": {
         "php": "^8.3",
+<<<<<<< HEAD
         "laravel/framework": "^13.0",
         "laravel/jetstream": "^5.5",
         "laravel/sanctum": "*",
+=======
+        "barryvdh/laravel-dompdf": "^3.1",
+        "laravel/framework": "^13.8",
+        "laravel/jetstream": "^5.5",
+        "laravel/sanctum": "^4.0",
+>>>>>>> ec6237d (Third Week of Assignment small changes)
         "laravel/tinker": "^3.0",
         "livewire/livewire": "^3.6.4"
     },

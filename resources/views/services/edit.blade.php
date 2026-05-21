@@ -1,4 +1,5 @@
 <x-app-layout>
+<<<<<<< HEAD
     <div class="py-12">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
@@ -71,6 +72,59 @@
                         </div>
                     </form>
                 </div>
+=======
+    <x-slot name="header">
+        <h2 class="page-header-title">{{ __('Edit Service Record') }} — {{ $vehicle->name }}</h2>
+    </x-slot>
+
+    <div class="page-container">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glass-card rounded-3xl p-6 sm:p-8">
+                @if ($errors->any())
+                    <div class="alert-error mb-6">
+                        <ul class="list-disc list-inside space-y-1">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <form method="POST" action="{{ route('vehicles.services.update', [$vehicle, $service]) }}" class="space-y-6">
+                    @csrf
+                    @method('PUT')
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="service_type" class="form-label">Service Type</label>
+                            <input type="text" name="service_type" id="service_type" value="{{ old('service_type', $service->service_type) }}" required class="form-input-dark">
+                        </div>
+                        <div>
+                            <label for="service_provider" class="form-label">Service Provider</label>
+                            <input type="text" name="service_provider" id="service_provider" value="{{ old('service_provider', $service->service_provider) }}" required class="form-input-dark">
+                        </div>
+                        <div>
+                            <label for="service_date" class="form-label">Service Date</label>
+                            <input type="date" name="service_date" id="service_date" value="{{ old('service_date', $service->service_date->format('Y-m-d')) }}" required class="form-input-dark">
+                        </div>
+                        <div>
+                            <label for="cost" class="form-label">Cost ($)</label>
+                            <input type="number" name="cost" id="cost" value="{{ old('cost', $service->cost) }}" required min="0" step="0.01" class="form-input-dark">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label for="mileage" class="form-label">Mileage at Service</label>
+                            <input type="number" name="mileage" id="mileage" value="{{ old('mileage', $service->mileage) }}" required min="0" step="1" class="form-input-dark md:max-w-xs">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea name="description" id="description" rows="4" required class="form-input-dark">{{ old('description', $service->description) }}</textarea>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-end gap-4 pt-6 border-t border-gray-200/80 dark:border-white/[0.06]">
+                        <a href="{{ route('vehicles.show', $vehicle) }}" class="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">Cancel</a>
+                        <button type="submit" class="btn-primary">Update Service Record</button>
+                    </div>
+                </form>
+>>>>>>> ec6237d (Third Week of Assignment small changes)
             </div>
         </div>
     </div>

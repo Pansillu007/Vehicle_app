@@ -1,4 +1,5 @@
 <x-app-layout>
+<<<<<<< HEAD
     <div class="py-8">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             
@@ -203,6 +204,27 @@
                     </div>
                 @endif
             </div>
+=======
+    <x-slot name="header">
+        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+            <div>
+                <h2 class="page-header-title">{{ __('My Vehicles') }}</h2>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Search, filter, and manage your fleet</p>
+            </div>
+            <div class="flex gap-2">
+                <a href="{{ route('trash.index') }}" class="btn-secondary text-sm">Trash</a>
+                <a href="{{ route('vehicles.create') }}" class="btn-primary shrink-0">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    Add Vehicle
+                </a>
+            </div>
+        </div>
+    </x-slot>
+
+    <div class="page-container">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <livewire:vehicle-list />
+>>>>>>> ec6237d (Third Week of Assignment small changes)
         </div>
     </div>
 </x-app-layout>

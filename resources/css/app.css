@@ -5,3 +5,246 @@
 [x-cloak] {
     display: none;
 }
+<<<<<<< HEAD
+=======
+
+/* ========================================
+   VEHICLEPRO — Premium SaaS Design System
+   ======================================== */
+
+@layer base {
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Custom scrollbar for dark mode */
+    .dark ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+    .dark ::-webkit-scrollbar-track {
+        background: #0f1520;
+    }
+    .dark ::-webkit-scrollbar-thumb {
+        background: #394155;
+        border-radius: 4px;
+    }
+    .dark ::-webkit-scrollbar-thumb:hover {
+        background: #565d6e;
+    }
+}
+
+@layer components {
+    /* Glass morphism card */
+    .glass-card {
+        @apply bg-white/80 dark:bg-slate-800/60 backdrop-blur-xl border border-gray-200/50 dark:border-white/[0.06] shadow-xl dark:shadow-2xl;
+    }
+
+    /* Glass navbar */
+    .glass-nav {
+        @apply bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border-b border-gray-200/50 dark:border-white/[0.06];
+    }
+
+    /* Premium button */
+    .btn-primary {
+        @apply inline-flex items-center justify-center px-6 py-3 rounded-xl font-semibold text-sm text-white
+               bg-gradient-to-r from-blue-600 to-indigo-600
+               hover:from-blue-500 hover:to-indigo-500
+               shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40
+               transform hover:-translate-y-0.5
+               transition-all duration-300 ease-out
+               focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900;
+    }
+
+    .btn-secondary {
+        @apply inline-flex items-center justify-center px-6 py-3 rounded-xl font-semibold text-sm
+               text-gray-700 dark:text-gray-200
+               bg-gray-100 dark:bg-slate-700/50
+               border border-gray-200 dark:border-slate-600/50
+               hover:bg-gray-200 dark:hover:bg-slate-600/50
+               transform hover:-translate-y-0.5
+               transition-all duration-300 ease-out
+               focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 dark:focus:ring-offset-slate-900;
+    }
+
+    .btn-danger {
+        @apply inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium text-sm
+               text-red-600 dark:text-red-400
+               bg-red-50 dark:bg-red-900/20
+               border border-red-200 dark:border-red-800/30
+               hover:bg-red-100 dark:hover:bg-red-900/40
+               transition-all duration-200;
+    }
+
+    /* Premium form inputs */
+    .form-input-dark {
+        @apply w-full bg-white dark:bg-slate-800/80 
+               border border-gray-300 dark:border-slate-600/50 
+               text-gray-900 dark:text-white 
+               rounded-xl px-4 py-3 
+               placeholder-gray-400 dark:placeholder-slate-500
+               focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 dark:focus:border-blue-400
+               transition-all duration-200
+               shadow-sm;
+    }
+
+    .form-label {
+        @apply block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5;
+    }
+
+    /* Glowing blobs */
+    .glowing-blob {
+        position: absolute;
+        filter: blur(120px);
+        z-index: 0;
+        opacity: 0.5;
+        pointer-events: none;
+    }
+
+    /* Page container for authenticated pages */
+    .page-container {
+        @apply py-8 lg:py-12 min-h-screen bg-slate-50;
+        background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 50%, #f0f9ff 100%);
+    }
+    .dark .page-container {
+        @apply bg-slate-950;
+        background: linear-gradient(135deg, #020617 0%, #0f172a 50%, #020617 100%);
+    }
+
+    /* Stat cards */
+    .stat-card {
+        @apply glass-card rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl;
+    }
+
+    /* Table styles */
+    .premium-table {
+        @apply w-full text-sm text-left;
+    }
+    .premium-table thead {
+        @apply text-xs uppercase tracking-wider;
+    }
+    .premium-table thead th {
+        @apply px-6 py-4 text-gray-500 dark:text-slate-400 font-semibold bg-gray-50/50 dark:bg-slate-700/30;
+    }
+    .premium-table tbody tr {
+        @apply border-b border-gray-100 dark:border-slate-700/50 
+               hover:bg-blue-50/50 dark:hover:bg-slate-700/30 
+               transition-colors duration-200;
+    }
+    .premium-table tbody td {
+        @apply px-6 py-4 text-gray-700 dark:text-slate-300;
+    }
+}
+
+@layer utilities {
+    /* Glow effects */
+    .glow-blue {
+        box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+    }
+    .glow-blue-lg {
+        box-shadow: 0 0 40px rgba(59, 130, 246, 0.4);
+    }
+
+    /* Text gradient */
+    .text-gradient {
+        @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-cyan-400 to-indigo-400;
+    }
+
+    /* Smooth theme transition */
+    .theme-transition {
+        transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    /* Auth split layout */
+    .auth-split-bg {
+        @apply bg-slate-50 text-gray-900;
+        background-image:
+            radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.08) 0, transparent 50%),
+            radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.08) 0, transparent 50%),
+            linear-gradient(135deg, #f8fafc 0%, #eef2ff 50%, #f0f9ff 100%);
+    }
+    .dark .auth-split-bg {
+        @apply bg-[#0B1120] text-gray-200;
+        background-image:
+            radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 1) 0, transparent 50%),
+            radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 0.25) 0, transparent 50%),
+            radial-gradient(at 100% 0%, hsla(210, 100%, 46%, 0.2) 0, transparent 50%);
+    }
+
+    .glass-auth-card {
+        @apply bg-white/90 dark:bg-slate-900/50 backdrop-blur-xl border border-gray-200/80 dark:border-white/[0.08] shadow-2xl;
+    }
+
+    .auth-blob {
+        @apply absolute rounded-full blur-[128px] opacity-40 dark:opacity-50;
+        animation: blobFloat 14s ease-in-out infinite;
+    }
+    .auth-blob-1 {
+        @apply -top-40 -left-40 w-96 h-96 bg-blue-500/30 dark:bg-blue-600/40;
+    }
+    .auth-blob-2 {
+        @apply -bottom-40 -right-40 w-96 h-96 bg-cyan-500/20 dark:bg-cyan-600/30;
+        animation-delay: 3s;
+    }
+    .auth-blob-3 {
+        @apply top-1/3 right-1/4 w-72 h-72 bg-indigo-500/20;
+        animation-delay: 6s;
+    }
+
+    @keyframes blobFloat {
+        0%, 100% { transform: translate(0, 0) scale(1); }
+        33% { transform: translate(20px, -30px) scale(1.05); }
+        66% { transform: translate(-15px, 15px) scale(0.95); }
+    }
+
+    .auth-input {
+        @apply w-full bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50
+               text-gray-900 dark:text-white rounded-xl px-4 py-3
+               placeholder-gray-400 dark:placeholder-slate-500
+               focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-blue-500
+               transition-all duration-200 shadow-sm;
+    }
+
+    .auth-btn-primary {
+        @apply w-full flex justify-center py-3.5 px-4 rounded-xl text-sm font-bold text-white
+               bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500
+               shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40
+               focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
+               dark:focus:ring-offset-slate-900
+               transition-all duration-300 transform hover:-translate-y-0.5
+               disabled:opacity-75 disabled:cursor-wait disabled:transform-none;
+    }
+
+    .nav-link-premium {
+        @apply relative text-sm font-medium text-gray-600 dark:text-gray-300
+               hover:text-gray-900 dark:hover:text-white transition-colors duration-200;
+    }
+    .nav-link-premium::after {
+        content: '';
+        @apply absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-full transition-all duration-300;
+    }
+    .nav-link-premium:hover::after,
+    .nav-link-premium.active::after {
+        @apply w-full;
+    }
+
+    .alert-error {
+        @apply mb-6 bg-red-50 dark:bg-red-900/40 border border-red-200 dark:border-red-500/50 text-red-700 dark:text-red-200 p-4 rounded-xl text-sm;
+    }
+    .alert-success {
+        @apply mb-6 bg-emerald-50 dark:bg-emerald-900/40 border border-emerald-200 dark:border-emerald-500/50 text-emerald-700 dark:text-emerald-200 p-4 rounded-xl text-sm;
+    }
+
+    .page-header-title {
+        @apply text-2xl font-bold text-gray-900 dark:text-white tracking-tight;
+    }
+}
+>>>>>>> ec6237d (Third Week of Assignment small changes)

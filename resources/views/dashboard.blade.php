@@ -1,5 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
+<<<<<<< HEAD
         <h2 class="font-semibold text-2xl text-gray-800 leading-tight">
             {{ __('Dashboard') }}
         </h2>
@@ -71,10 +72,92 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
                             </svg>
                         </div>
+=======
+        <div>
+            <h2 class="page-header-title">{{ __('Dashboard') }}</h2>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Fleet analytics, reminders, and activity</p>
+        </div>
+    </x-slot>
+
+    <div class="page-container">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+
+            @if(isset($reminders) && $reminders->isNotEmpty())
+            <div class="space-y-3">
+                @foreach($reminders as $reminder)
+                <div class="glass-card rounded-2xl p-4 flex items-center justify-between border-l-4 {{ $reminder->status === 'overdue' ? 'border-red-500 bg-red-500/5' : 'border-amber-500 bg-amber-500/5' }}">
+                    <div>
+                        <p class="font-semibold text-gray-900 dark:text-white">{{ $reminder->vehicle->name }}</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">{{ $reminder->message }}</p>
+                    </div>
+                    <span class="text-xs font-bold px-3 py-1 rounded-full {{ $reminder->status === 'overdue' ? 'bg-red-500/20 text-red-400' : 'bg-amber-500/20 text-amber-400' }}">
+                        {{ $reminder->status === 'overdue' ? 'OVERDUE' : 'DUE SOON' }}
+                    </span>
+                </div>
+                @endforeach
+            </div>
+            @endif
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                @foreach([
+                    ['label' => 'Total Vehicles', 'value' => $totalVehicles ?? 0, 'gradient' => 'from-blue-600 to-indigo-600'],
+                    ['label' => 'Service Records', 'value' => $totalServiceRecords ?? 0, 'gradient' => 'from-cyan-600 to-blue-600'],
+                    ['label' => 'Maintenance Cost', 'value' => '$'.number_format($maintenanceCost ?? 0, 2), 'gradient' => 'from-indigo-600 to-violet-600'],
+                    ['label' => 'Most Expensive', 'value' => $mostExpensiveVehicle ? '$'.number_format($mostExpensiveVehicle->total_cost ?? 0, 0) : '—', 'gradient' => 'from-violet-600 to-purple-600'],
+                ] as $stat)
+                <div class="stat-card group">
+                    <div class="flex items-center gap-4">
+                        <div class="p-3 rounded-xl bg-gradient-to-br {{ $stat['gradient'] }} shadow-lg">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">{{ $stat['label'] }}</p>
+                            <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ $stat['value'] }}</p>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="glass-card rounded-3xl p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Monthly Maintenance Cost</h3>
+                    <div class="relative h-64"><canvas id="costChart"></canvas></div>
+                </div>
+                <div class="glass-card rounded-3xl p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Service Types</h3>
+                    <div class="relative h-64"><canvas id="serviceChart"></canvas></div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="glass-card rounded-3xl p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Fuel Types</h3>
+                    <div class="relative h-48"><canvas id="fuelChart"></canvas></div>
+                </div>
+                <div class="lg:col-span-2 glass-card rounded-3xl p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Recent Services</h3>
+                    <div class="space-y-4 max-h-64 overflow-y-auto">
+                        @forelse($recentActivity ?? [] as $activity)
+                        <div class="flex gap-3 items-start">
+                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center flex-shrink-0">
+                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            </div>
+                            <div>
+                                <a href="{{ route('vehicles.show', $activity->vehicle) }}" class="font-medium text-gray-900 dark:text-white hover:text-blue-500">{{ $activity->vehicle->name }}</a>
+                                <span class="text-gray-500 dark:text-gray-400"> — {{ $activity->service_type }}</span>
+                                <p class="text-xs text-gray-400">{{ $activity->created_at->diffForHumans() }}</p>
+                            </div>
+                        </div>
+                        @empty
+                        <p class="text-sm text-gray-500">No recent activity.</p>
+                        @endforelse
+>>>>>>> ec6237d (Third Week of Assignment small changes)
                     </div>
                 </div>
             </div>
 
+<<<<<<< HEAD
             <!-- Maintenance Reminders Alert -->
             @if(count($upcomingReminders) > 0)
             <div class="bg-amber-50 border-l-4 border-amber-500 rounded-xl shadow-sm p-5">
@@ -100,10 +183,26 @@
                             @endforeach
                         </div>
                     </div>
+=======
+            @if(isset($activityLogs) && $activityLogs->isNotEmpty())
+            <div class="glass-card rounded-3xl p-6">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Activity Log</h3>
+                <div class="space-y-3">
+                    @foreach($activityLogs as $log)
+                    <div class="flex justify-between items-start py-2 border-b border-gray-100 dark:border-white/5 last:border-0">
+                        <div>
+                            <p class="text-sm font-medium text-gray-900 dark:text-white">{{ $log->description }}</p>
+                            <p class="text-xs text-gray-500">{{ $log->user?->name ?? 'System' }} · {{ $log->action }}</p>
+                        </div>
+                        <span class="text-xs text-gray-400">{{ $log->created_at->diffForHumans() }}</span>
+                    </div>
+                    @endforeach
+>>>>>>> ec6237d (Third Week of Assignment small changes)
                 </div>
             </div>
             @endif
 
+<<<<<<< HEAD
             <!-- Charts Section -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <!-- Monthly Cost Chart -->
@@ -392,4 +491,45 @@
             });
         });
     </script>
+=======
+        </div>
+    </div>
+
+    @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const isDark = document.documentElement.classList.contains('dark');
+            const gridColor = isDark ? 'rgba(148,163,184,0.1)' : 'rgba(148,163,184,0.2)';
+            const labelColor = isDark ? '#94a3b8' : '#64748b';
+            const chartData = @json($chartData ?? []);
+            const serviceDist = @json(array_values($serviceDistribution ?? []));
+            const serviceLabels = @json(array_keys($serviceDistribution ?? []));
+            const fuelDist = @json(array_values($fuelDistribution ?? []));
+            const fuelLabels = @json(array_keys($fuelDistribution ?? []));
+
+            const costCtx = document.getElementById('costChart');
+            if (costCtx) new Chart(costCtx, {
+                type: 'bar',
+                data: { labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'], datasets: [{ data: chartData, backgroundColor: 'rgba(59,130,246,0.7)', borderRadius: 8 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: gridColor }, ticks: { color: labelColor } }, x: { ticks: { color: labelColor }, grid: { display: false } } } }
+            });
+
+            const serviceCtx = document.getElementById('serviceChart');
+            if (serviceCtx && serviceLabels.length) new Chart(serviceCtx, {
+                type: 'doughnut',
+                data: { labels: serviceLabels, datasets: [{ data: serviceDist, backgroundColor: ['#3b82f6','#06b6d4','#6366f1','#8b5cf6','#ec4899','#f59e0b'] }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: labelColor } } } }
+            });
+
+            const fuelCtx = document.getElementById('fuelChart');
+            if (fuelCtx && fuelLabels.length) new Chart(fuelCtx, {
+                type: 'pie',
+                data: { labels: fuelLabels, datasets: [{ data: fuelDist, backgroundColor: ['#2563eb','#0891b2','#4f46e5','#7c3aed','#db2777'] }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: labelColor } } } }
+            });
+        });
+    </script>
+    @endpush
+>>>>>>> ec6237d (Third Week of Assignment small changes)
 </x-app-layout>
