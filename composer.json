@@ -2,21 +2,16 @@
     "$schema": "https://getcomposer.org/schema.json",
     "name": "laravel/laravel",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "description": "VehiclePro - Premium vehicle management SaaS",
+    "keywords": ["laravel", "framework", "vehicle"],
     "license": "MIT",
     "require": {
         "php": "^8.3",
-<<<<<<< HEAD
-        "laravel/framework": "^13.0",
-        "laravel/jetstream": "^5.5",
-        "laravel/sanctum": "*",
-=======
         "barryvdh/laravel-dompdf": "^3.1",
         "laravel/framework": "^13.8",
         "laravel/jetstream": "^5.5",
         "laravel/sanctum": "^4.0",
->>>>>>> ec6237d (Third Week of Assignment small changes)
+        "laravel/socialite": "^5.27",
         "laravel/tinker": "^3.0",
         "livewire/livewire": "^3.6.4"
     },

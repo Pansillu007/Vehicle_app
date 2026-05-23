@@ -4,11 +4,8 @@ import typography from '@tailwindcss/typography';
 
 /** @type {import('tailwindcss').Config} */
 export default {
-<<<<<<< HEAD
-=======
-    darkMode: 'class',
+darkMode: 'class',
 
->>>>>>> ec6237d (Third Week of Assignment small changes)
     content: [
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
         './vendor/laravel/jetstream/**/*.blade.php',
@@ -19,10 +16,7 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-<<<<<<< HEAD
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
-=======
-                sans: ['Inter', 'Figtree', ...defaultTheme.fontFamily.sans],
+sans: ['Inter', 'Figtree', ...defaultTheme.fontFamily.sans],
             },
             colors: {
                 dark: {
@@ -63,7 +57,6 @@ export default {
                     '0%': { opacity: '0' },
                     '100%': { opacity: '1' },
                 },
->>>>>>> ec6237d (Third Week of Assignment small changes)
             },
         },
     },

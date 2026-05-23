@@ -1,7 +1,12 @@
 <x-app-layout>
-    <x-slot name="header"><h2 class="page-header-title">Trash</h2></x-slot>
+    <x-slot name="header">
+        <div>
+            <h2 class="page-header-title">Trash</h2>
+            <p class="page-header-subtitle">Restore or permanently delete soft-deleted records</p>
+        </div>
+    </x-slot>
     <div class="page-container">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        <div id="trash-app" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
             <div class="glass-card rounded-3xl p-6">
                 <h3 class="font-semibold text-gray-900 dark:text-white mb-4">Deleted Vehicles</h3>
                 <div class="overflow-x-auto">
@@ -13,8 +18,8 @@
                                 <td>{{ $vehicle->name }} @if(auth()->user()->isAdmin() && $vehicle->user) <span class="text-xs text-gray-500">({{ $vehicle->user->name }})</span> @endif</td>
                                 <td>{{ $vehicle->deleted_at->diffForHumans() }}</td>
                                 <td class="text-right space-x-2">
-                                    <form action="{{ route('trash.vehicles.restore', $vehicle->id) }}" method="POST" class="inline">@csrf<button type="submit" class="text-blue-500 text-sm">Restore</button></form>
-                                    <form action="{{ route('trash.vehicles.force-delete', $vehicle->id) }}" method="POST" class="inline" onsubmit="return confirm('Permanent delete?');">@csrf @method('DELETE')<button type="submit" class="text-red-500 text-sm">Delete forever</button></form>
+                                    <button type="button" data-restore-vehicle="{{ $vehicle->id }}" class="text-blue-500 text-sm bg-transparent border-0 cursor-pointer hover:underline">Restore</button>
+                                    <button type="button" data-force-delete-vehicle="{{ $vehicle->id }}" class="text-red-500 text-sm bg-transparent border-0 cursor-pointer hover:underline">Delete forever</button>
                                 </td>
                             </tr>
                             @empty
@@ -35,8 +40,8 @@
                             <td>{{ $service->service_type }}</td>
                             <td>{{ $service->vehicle?->name }}</td>
                             <td class="text-right space-x-2">
-                                <form action="{{ route('trash.services.restore', $service->id) }}" method="POST" class="inline">@csrf<button type="submit" class="text-blue-500 text-sm">Restore</button></form>
-                                <form action="{{ route('trash.services.force-delete', $service->id) }}" method="POST" class="inline" onsubmit="return confirm('Permanent delete?');">@csrf @method('DELETE')<button type="submit" class="text-red-500 text-sm">Delete forever</button></form>
+                                <button type="button" data-restore-service="{{ $service->id }}" class="text-blue-500 text-sm bg-transparent border-0 cursor-pointer hover:underline">Restore</button>
+                                <button type="button" data-force-delete-service="{{ $service->id }}" class="text-red-500 text-sm bg-transparent border-0 cursor-pointer hover:underline">Delete forever</button>
                             </td>
                         </tr>
                         @empty

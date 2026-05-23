@@ -1,7 +1,9 @@
 # Vehicle Maintenance Management System - SSP2
 
+> **For marking and viva:** use **[SSP2_SUBMISSION.md](SSP2_SUBMISSION.md)** (up to date, Laravel 13, nested API routes, CSV export, Postman collection).
+
 ## Project Overview
-A complete, production-ready Laravel 12 web application for managing vehicles and their service records. Built for university submission with enterprise-level features.
+A complete, production-ready Laravel 13 web application for managing vehicles and their service records. Built for university submission with enterprise-level features.
 
 ---
 
@@ -57,12 +59,11 @@ A complete, production-ready Laravel 12 web application for managing vehicles an
 - ✅ GET /api/vehicles/{id} - Get vehicle
 - ✅ PUT /api/vehicles/{id} - Update vehicle
 - ✅ DELETE /api/vehicles/{id} - Delete vehicle
-- ✅ GET /api/vehicles/{id}/services - List service records
-- ✅ POST /api/vehicles/{id}/services - Create service record
-- ✅ GET /api/services/{id} - Get service record
-- ✅ PUT /api/services/{id} - Update service record
-- ✅ DELETE /api/services/{id} - Delete service record
-- ✅ GET /api/docs - API documentation
+- ✅ Nested `/api/vehicles/{id}/services` — full service CRUD
+- ✅ GET /api/docs — JSON API documentation
+- ✅ GET /api/export/vehicles — CSV fleet export
+- ✅ GET /api/export/vehicles/{id}/services — CSV service history
+- ✅ Trash restore/force-delete via `/api/trash/*`
 - ✅ JSON responses with success/error messages
 
 ### 7. Security Features

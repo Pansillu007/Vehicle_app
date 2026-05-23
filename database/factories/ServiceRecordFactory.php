@@ -24,6 +24,7 @@ class ServiceRecordFactory extends Factory
             'description' => $this->faker->sentence,
             'cost' => $this->faker->randomFloat(2, 20, 500),
             'service_date' => $this->faker->dateTimeBetween('-1 year', 'now'),
+            'mileage' => $this->faker->numberBetween(1000, 150000),
             'service_provider' => $this->faker->company,
         ];
     }

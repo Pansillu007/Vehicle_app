@@ -20,7 +20,7 @@
         }
     </script>
 </head>
-<body class="antialiased overflow-x-hidden theme-transition text-gray-200 dark:text-gray-200">
+<body class="antialiased overflow-x-hidden theme-transition text-gray-800 dark:text-gray-200">
     <div class="min-h-screen flex auth-split-bg relative">
         <!-- Floating blobs -->
         <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">

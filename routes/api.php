@@ -1,50 +1,48 @@
 <?php
 
-<<<<<<< HEAD
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\VehicleApiController;
-use App\Http\Controllers\Api\ServiceRecordApiController;
+use App\Http\Controllers\Api\ApiDashboardController;
 use App\Http\Controllers\Api\ApiDocumentationController;
-
-// Public routes
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
-
-// Protected routes
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    });
-
-    // Auth routes
-    Route::post('/logout', [AuthController::class, 'logout']);
-    Route::get('/profile', [AuthController::class, 'profile']);
-    Route::put('/profile', [AuthController::class, 'updateProfile']);
-    Route::post('/change-password', [AuthController::class, 'changePassword']);
-
-    // Vehicle routes
-    Route::apiResource('vehicles', VehicleApiController::class);
-    
-    // Service record routes (nested under vehicles)
-    Route::apiResource('vehicles.services', ServiceRecordApiController::class)->shallow();
-    
-    // API Documentation
-    Route::get('/docs', [ApiDocumentationController::class, 'index'])->name('api.docs');
-=======
+use App\Http\Controllers\Api\ApiExportController;
 use App\Http\Controllers\Api\ApiProfileController;
 use App\Http\Controllers\Api\ApiServiceController;
+use App\Http\Controllers\Api\ApiTrashController;
 use App\Http\Controllers\Api\ApiVehicleController;
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+/*
+|--------------------------------------------------------------------------
+| VehiclePro JSON API — all CRUD and data mutations (Sanctum Bearer tokens)
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware('throttle:10,1')->group(function () {
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/login', [AuthController::class, 'login']);
+});
+
+Route::get('/docs', [ApiDocumentationController::class, 'index'])->name('api.docs');
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', fn (Request $request) => new UserResource($request->user()->loadCount('vehicles')));
+    Route::post('/logout', [AuthController::class, 'logout']);
+
+    Route::get('/dashboard', [ApiDashboardController::class, 'index'])->name('api.dashboard');
+
+    Route::get('/export/vehicles', [ApiExportController::class, 'vehicles'])->name('api.export.vehicles');
+    Route::get('/export/vehicles/{vehicle}/services', [ApiExportController::class, 'vehicleServices'])->name('api.export.vehicle-services');
 
     Route::get('/profile', [ApiProfileController::class, 'show']);
     Route::put('/profile', [ApiProfileController::class, 'update']);
+    Route::put('/profile/password', [ApiProfileController::class, 'updatePassword']);
+
+    Route::get('/trash', [ApiTrashController::class, 'index'])->name('api.trash.index');
+    Route::post('/trash/vehicles/{id}/restore', [ApiTrashController::class, 'restoreVehicle'])->name('api.trash.vehicles.restore');
+    Route::delete('/trash/vehicles/{id}', [ApiTrashController::class, 'forceDeleteVehicle'])->name('api.trash.vehicles.force-delete');
+    Route::post('/trash/services/{id}/restore', [ApiTrashController::class, 'restoreService'])->name('api.trash.services.restore');
+    Route::delete('/trash/services/{id}', [ApiTrashController::class, 'forceDeleteService'])->name('api.trash.services.force-delete');
 
     Route::apiResource('vehicles', ApiVehicleController::class)->names([
         'index' => 'api.vehicles.index',
@@ -54,10 +52,11 @@ Route::middleware('auth:sanctum')->group(function () {
         'destroy' => 'api.vehicles.destroy',
     ]);
 
-    Route::get('/vehicles/{vehicle}/services', [ApiServiceController::class, 'index']);
-    Route::post('/vehicles/{vehicle}/services', [ApiServiceController::class, 'store']);
-    Route::get('/vehicles/{vehicle}/services/{service}', [ApiServiceController::class, 'show']);
-    Route::put('/vehicles/{vehicle}/services/{service}', [ApiServiceController::class, 'update']);
-    Route::delete('/vehicles/{vehicle}/services/{service}', [ApiServiceController::class, 'destroy']);
->>>>>>> ec6237d (Third Week of Assignment small changes)
+    Route::apiResource('vehicles.services', ApiServiceController::class)->names([
+        'index' => 'api.vehicles.services.index',
+        'store' => 'api.vehicles.services.store',
+        'show' => 'api.vehicles.services.show',
+        'update' => 'api.vehicles.services.update',
+        'destroy' => 'api.vehicles.services.destroy',
+    ]);
 });

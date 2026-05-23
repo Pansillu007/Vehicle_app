@@ -1,0 +1,178 @@
+{
+  "info": {
+    "name": "VehiclePro API",
+    "description": "SSP2 Vehicle Management System — Sanctum Bearer auth. Set {{base_url}} and {{token}} after login.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://127.0.0.1:8000/api" },
+    { "key": "token", "value": "" },
+    { "key": "vehicle_id", "value": "1" },
+    { "key": "service_id", "value": "1" }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+  },
+  "item": [
+    {
+      "name": "Docs",
+      "item": [
+        {
+          "name": "GET API Docs",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "url": "{{base_url}}/docs"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "POST Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.data && json.data.token) {",
+                  "  pm.collectionVariables.set('token', json.data.token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"password\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{base_url}}/login"
+          }
+        },
+        {
+          "name": "POST Logout",
+          "request": { "method": "POST", "url": "{{base_url}}/logout" }
+        },
+        {
+          "name": "GET Current User",
+          "request": { "method": "GET", "url": "{{base_url}}/user" }
+        }
+      ]
+    },
+    {
+      "name": "Vehicles",
+      "item": [
+        {
+          "name": "GET List Vehicles",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/vehicles?search=&sort=latest",
+              "host": ["{{base_url}}"],
+              "path": ["vehicles"],
+              "query": [
+                { "key": "search", "value": "" },
+                { "key": "sort", "value": "latest" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "POST Create Vehicle",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Demo Van\",\n  \"make\": \"Ford\",\n  \"model\": \"Transit\",\n  \"number_plate\": \"DEMO-001\",\n  \"year\": 2023,\n  \"color\": \"White\",\n  \"mileage\": 5000,\n  \"fuel_type\": \"Diesel\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{base_url}}/vehicles"
+          }
+        },
+        {
+          "name": "GET Show Vehicle",
+          "request": { "method": "GET", "url": "{{base_url}}/vehicles/{{vehicle_id}}" }
+        },
+        {
+          "name": "PUT Update Vehicle",
+          "request": {
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Demo Van Updated\",\n  \"make\": \"Ford\",\n  \"model\": \"Transit\",\n  \"number_plate\": \"DEMO-001\",\n  \"year\": 2023,\n  \"color\": \"Blue\",\n  \"mileage\": 6000,\n  \"fuel_type\": \"Diesel\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{base_url}}/vehicles/{{vehicle_id}}"
+          }
+        },
+        {
+          "name": "DELETE Vehicle",
+          "request": { "method": "DELETE", "url": "{{base_url}}/vehicles/{{vehicle_id}}" }
+        }
+      ]
+    },
+    {
+      "name": "Services",
+      "item": [
+        {
+          "name": "GET List Services",
+          "request": { "method": "GET", "url": "{{base_url}}/vehicles/{{vehicle_id}}/services" }
+        },
+        {
+          "name": "POST Create Service",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"service_type\": \"Oil Change\",\n  \"description\": \"Synthetic oil\",\n  \"service_date\": \"2024-06-01\",\n  \"cost\": 85.5,\n  \"mileage\": 5100,\n  \"service_provider\": \"Quick Lube\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{base_url}}/vehicles/{{vehicle_id}}/services"
+          }
+        },
+        {
+          "name": "DELETE Service",
+          "request": {
+            "method": "DELETE",
+            "url": "{{base_url}}/vehicles/{{vehicle_id}}/services/{{service_id}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Export",
+      "item": [
+        {
+          "name": "GET Export Vehicles CSV",
+          "request": { "method": "GET", "url": "{{base_url}}/export/vehicles" }
+        },
+        {
+          "name": "GET Export Services CSV",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/export/vehicles/{{vehicle_id}}/services"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Dashboard",
+      "item": [
+        {
+          "name": "GET Dashboard",
+          "request": { "method": "GET", "url": "{{base_url}}/dashboard" }
+        }
+      ]
+    }
+  ]
+}

@@ -117,10 +117,7 @@ return [
     'limiters' => [
         'login' => 'login',
         'two-factor' => 'two-factor',
-<<<<<<< HEAD
-=======
-        'passkeys' => 'passkeys',
->>>>>>> ec6237d (Third Week of Assignment small changes)
+'passkeys' => 'passkeys',
     ],
 
     /*
@@ -138,9 +135,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-<<<<<<< HEAD
-=======
-    | Passkeys
+| Passkeys
     |--------------------------------------------------------------------------
     |
     | These settings configure Fortify's passkey (WebAuthn) support. Passkeys
@@ -157,7 +152,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
->>>>>>> ec6237d (Third Week of Assignment small changes)
     | Features
     |--------------------------------------------------------------------------
     |
@@ -178,12 +172,9 @@ return [
             'confirmPassword' => true,
             // 'window' => 0,
         ]),
-<<<<<<< HEAD
-=======
-        Features::passkeys([
+Features::passkeys([
             'confirmPassword' => true,
         ]),
->>>>>>> ec6237d (Third Week of Assignment small changes)
     ],
 
 ];

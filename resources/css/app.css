@@ -5,9 +5,6 @@
 [x-cloak] {
     display: none;
 }
-<<<<<<< HEAD
-=======
-
 /* ========================================
    VEHICLEPRO — Premium SaaS Design System
    ======================================== */
@@ -43,9 +40,15 @@
 }
 
 @layer components {
-    /* Glass morphism card */
+    /* Glass morphism card — navy SaaS theme */
     .glass-card {
-        @apply bg-white/80 dark:bg-slate-800/60 backdrop-blur-xl border border-gray-200/50 dark:border-white/[0.06] shadow-xl dark:shadow-2xl;
+        @apply bg-white/85 dark:bg-slate-900/55 backdrop-blur-xl border border-slate-200/60 dark:border-white/[0.07]
+               shadow-xl shadow-slate-900/5 dark:shadow-black/40;
+    }
+
+    .glass-card-hover {
+        @apply glass-card transition-all duration-300 hover:-translate-y-0.5 hover:shadow-2xl
+               hover:border-blue-500/20 dark:hover:border-blue-500/30;
     }
 
     /* Glass navbar */
@@ -121,7 +124,49 @@
 
     /* Stat cards */
     .stat-card {
-        @apply glass-card rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl;
+        @apply glass-card rounded-2xl p-5 sm:p-6 transition-all duration-300
+               hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-500/10 dark:hover:shadow-blue-500/5
+               hover:border-blue-500/15;
+    }
+
+    .stat-card-icon {
+        @apply p-3 rounded-xl shadow-lg shrink-0;
+    }
+
+    /* Quick action tiles */
+    .quick-action {
+        @apply glass-card-hover rounded-2xl p-4 flex flex-col items-center text-center gap-2
+               text-gray-700 dark:text-gray-200 min-w-[7rem];
+    }
+
+    .quick-action-icon {
+        @apply w-11 h-11 rounded-xl bg-gradient-to-br from-blue-600/90 to-indigo-600/90
+               flex items-center justify-center text-white shadow-lg shadow-blue-500/25;
+    }
+
+    /* Profile section wrapper */
+    .profile-panel {
+        @apply glass-card rounded-3xl p-6 sm:p-8;
+    }
+
+    /* Livewire loading */
+    .livewire-loading {
+        @apply inline-flex items-center gap-2 text-sm text-blue-500 dark:text-blue-400 animate-pulse;
+    }
+
+    .skeleton {
+        @apply animate-pulse bg-slate-200 dark:bg-slate-700/50 rounded-xl;
+    }
+
+    /* Badge variants */
+    .badge-blue {
+        @apply text-xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20;
+    }
+    .badge-amber {
+        @apply text-xs font-bold px-3 py-1 rounded-full bg-amber-500/20 text-amber-600 dark:text-amber-400;
+    }
+    .badge-red {
+        @apply text-xs font-bold px-3 py-1 rounded-full bg-red-500/20 text-red-500 dark:text-red-400;
     }
 
     /* Table styles */
@@ -244,7 +289,40 @@
     }
 
     .page-header-title {
-        @apply text-2xl font-bold text-gray-900 dark:text-white tracking-tight;
+        @apply text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white tracking-tight;
+    }
+
+    .page-header-subtitle {
+        @apply text-sm text-gray-500 dark:text-slate-400 mt-1;
+    }
+
+    .dashboard-welcome {
+        @apply glass-card rounded-3xl p-6 sm:p-8 relative overflow-hidden;
+    }
+
+    .dashboard-welcome-glow {
+        @apply absolute -top-24 -right-24 w-64 h-64 bg-blue-500/20 rounded-full blur-[80px] pointer-events-none;
+    }
+
+    /* Pagination (Laravel default) */
+    nav[role="navigation"] span, nav[role="navigation"] a {
+        @apply theme-transition;
     }
 }
->>>>>>> ec6237d (Third Week of Assignment small changes)
+
+/* Utility aliases used in Blade */
+.animate-fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+}
+.animate-slide-up {
+    animation: slideUp 0.5s ease-out forwards;
+}
+
+@keyframes slideUp {
+    0% { transform: translateY(16px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}

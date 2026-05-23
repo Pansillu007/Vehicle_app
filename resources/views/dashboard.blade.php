@@ -1,535 +1,114 @@
 <x-app-layout>
     <x-slot name="header">
-<<<<<<< HEAD
-        <h2 class="font-semibold text-2xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
-
-    <div class="py-8">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            
-            <!-- Statistics Cards -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-                <!-- Total Vehicles -->
-                <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 p-6 border-l-4 border-blue-500">
-                    <div class="flex items-center justify-between">
-                        <div class="flex-1">
-                            <p class="text-sm font-medium text-gray-600 uppercase tracking-wide">Total Vehicles</p>
-                            <p class="text-3xl font-bold text-gray-900 mt-2">{{ $vehiclesCount }}</p>
-                            <p class="text-xs text-gray-500 mt-1">Active fleet</p>
-                        </div>
-                        <div class="bg-blue-50 rounded-xl p-3">
-                            <svg class="h-7 w-7 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Total Services -->
-                <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 p-6 border-l-4 border-green-500">
-                    <div class="flex items-center justify-between">
-                        <div class="flex-1">
-                            <p class="text-sm font-medium text-gray-600 uppercase tracking-wide">Service Records</p>
-                            <p class="text-3xl font-bold text-gray-900 mt-2">{{ $servicesCount }}</p>
-                            <p class="text-xs text-gray-500 mt-1">Total maintained</p>
-                        </div>
-                        <div class="bg-green-50 rounded-xl p-3">
-                            <svg class="h-7 w-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Total Maintenance Cost -->
-                <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 p-6 border-l-4 border-purple-500">
-                    <div class="flex items-center justify-between">
-                        <div class="flex-1">
-                            <p class="text-sm font-medium text-gray-600 uppercase tracking-wide">Maintenance Cost</p>
-                            <p class="text-3xl font-bold text-gray-900 mt-2">RM {{ number_format($totalMaintenanceCost, 2) }}</p>
-                            <p class="text-xs text-gray-500 mt-1">Lifetime spend</p>
-                        </div>
-                        <div class="bg-purple-50 rounded-xl p-3">
-                            <svg class="h-7 w-7 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Upcoming Reminders -->
-                <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 p-6 border-l-4 border-orange-500">
-                    <div class="flex items-center justify-between">
-                        <div class="flex-1">
-                            <p class="text-sm font-medium text-gray-600 uppercase tracking-wide">Pending Reminders</p>
-                            <p class="text-3xl font-bold text-gray-900 mt-2">{{ count($upcomingReminders) }}</p>
-                            <p class="text-xs text-gray-500 mt-1">Requires attention</p>
-                        </div>
-                        <div class="bg-orange-50 rounded-xl p-3">
-                            <svg class="h-7 w-7 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
-                            </svg>
-                        </div>
-=======
-        <div>
-            <h2 class="page-header-title">{{ __('Dashboard') }}</h2>
-            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Fleet analytics, reminders, and activity</p>
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+                <h2 class="page-header-title">{{ __('Dashboard') }}</h2>
+                <p class="page-header-subtitle">Fleet analytics loaded via API</p>
+            </div>
+            <p class="text-xs text-gray-400 dark:text-slate-500 font-medium">{{ now()->format('l, F j, Y') }}</p>
         </div>
     </x-slot>
 
     <div class="page-container">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        <div id="dashboard-app"
+            class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-8 transition-opacity"
+            data-user-name="{{ auth()->user()->name }}"
+            data-routes="{{ json_encode([
+                'vehicles' => route('vehicles.index'),
+                'vehicleShow' => route('vehicles.show', ['vehicle' => '__ID__']),
+            ]) }}">
 
-            @if(isset($reminders) && $reminders->isNotEmpty())
-            <div class="space-y-3">
-                @foreach($reminders as $reminder)
-                <div class="glass-card rounded-2xl p-4 flex items-center justify-between border-l-4 {{ $reminder->status === 'overdue' ? 'border-red-500 bg-red-500/5' : 'border-amber-500 bg-amber-500/5' }}">
+            <div class="dashboard-welcome">
+                <div class="dashboard-welcome-glow"></div>
+                <div class="relative flex flex-col md:flex-row md:items-center md:justify-between gap-6">
                     <div>
-                        <p class="font-semibold text-gray-900 dark:text-white">{{ $reminder->vehicle->name }}</p>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">{{ $reminder->message }}</p>
+                        <p class="text-sm font-medium text-blue-600 dark:text-blue-400 mb-1">Welcome back</p>
+                        <h3 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white" data-user-name>{{ auth()->user()->name }}</h3>
+                        <p class="text-gray-500 dark:text-slate-400 mt-2 max-w-lg text-sm">
+                            You have <span class="font-semibold text-gray-900 dark:text-white" data-count-vehicles>—</span> vehicles
+                            and <span class="font-semibold text-gray-900 dark:text-white" data-count-services>—</span> service records on file.
+                        </p>
                     </div>
-                    <span class="text-xs font-bold px-3 py-1 rounded-full {{ $reminder->status === 'overdue' ? 'bg-red-500/20 text-red-400' : 'bg-amber-500/20 text-amber-400' }}">
-                        {{ $reminder->status === 'overdue' ? 'OVERDUE' : 'DUE SOON' }}
-                    </span>
+                    <div class="flex flex-wrap gap-2 sm:gap-3">
+                        <a href="{{ route('vehicles.create') }}" class="btn-primary text-sm py-2.5">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                            Add Vehicle
+                        </a>
+                        <a href="{{ route('vehicles.index') }}" class="btn-secondary text-sm py-2.5">View Fleet</a>
+                    </div>
                 </div>
-                @endforeach
             </div>
-            @endif
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                @foreach([
-                    ['label' => 'Total Vehicles', 'value' => $totalVehicles ?? 0, 'gradient' => 'from-blue-600 to-indigo-600'],
-                    ['label' => 'Service Records', 'value' => $totalServiceRecords ?? 0, 'gradient' => 'from-cyan-600 to-blue-600'],
-                    ['label' => 'Maintenance Cost', 'value' => '$'.number_format($maintenanceCost ?? 0, 2), 'gradient' => 'from-indigo-600 to-violet-600'],
-                    ['label' => 'Most Expensive', 'value' => $mostExpensiveVehicle ? '$'.number_format($mostExpensiveVehicle->total_cost ?? 0, 0) : '—', 'gradient' => 'from-violet-600 to-purple-600'],
-                ] as $stat)
-                <div class="stat-card group">
-                    <div class="flex items-center gap-4">
-                        <div class="p-3 rounded-xl bg-gradient-to-br {{ $stat['gradient'] }} shadow-lg">
-                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-                        </div>
-                        <div>
-                            <p class="text-sm text-gray-500 dark:text-gray-400">{{ $stat['label'] }}</p>
-                            <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ $stat['value'] }}</p>
-                        </div>
-                    </div>
-                </div>
-                @endforeach
+            <div class="flex flex-wrap gap-3 sm:gap-4">
+                <a href="{{ route('vehicles.index') }}" class="quick-action flex-1 sm:flex-none">
+                    <span class="quick-action-icon"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg></span>
+                    <span class="text-xs font-semibold">Vehicles</span>
+                </a>
+                <a href="{{ route('vehicles.create') }}" class="quick-action flex-1 sm:flex-none">
+                    <span class="quick-action-icon bg-gradient-to-br from-cyan-600 to-blue-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg></span>
+                    <span class="text-xs font-semibold">New Vehicle</span>
+                </a>
+                <a href="{{ route('trash.index') }}" class="quick-action flex-1 sm:flex-none">
+                    <span class="quick-action-icon bg-gradient-to-br from-slate-600 to-slate-800"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></span>
+                    <span class="text-xs font-semibold">Trash</span>
+                </a>
+                <a href="{{ route('profile.show') }}" class="quick-action flex-1 sm:flex-none">
+                    <span class="quick-action-icon bg-gradient-to-br from-indigo-600 to-violet-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg></span>
+                    <span class="text-xs font-semibold">Profile</span>
+                </a>
+                @if(auth()->user()->isAdmin())
+                <a href="{{ route('admin.dashboard') }}" class="quick-action flex-1 sm:flex-none">
+                    <span class="quick-action-icon bg-gradient-to-br from-violet-600 to-purple-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></span>
+                    <span class="text-xs font-semibold">Admin</span>
+                </a>
+                @endif
             </div>
+
+            <div class="hidden space-y-3" data-reminders>
+                <h3 class="text-sm font-semibold text-gray-500 dark:text-slate-400 uppercase tracking-wider">Service alerts</h3>
+            </div>
+
+            <livewire:dashboard-stats />
+
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div class="glass-card rounded-3xl p-6">
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Monthly Maintenance Cost</h3>
-                    <div class="relative h-64"><canvas id="costChart"></canvas></div>
+                <div class="glass-card rounded-3xl p-5 sm:p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-1">Monthly Maintenance Cost</h3>
+                    <p class="text-xs text-gray-500 dark:text-slate-400 mb-4">{{ date('Y') }} · Year to date</p>
+                    <div class="relative h-56 sm:h-64">
+                        <canvas id="costChart"></canvas>
+                    </div>
                 </div>
-                <div class="glass-card rounded-3xl p-6">
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Service Types</h3>
-                    <div class="relative h-64"><canvas id="serviceChart"></canvas></div>
+                <div class="glass-card rounded-3xl p-5 sm:p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-1">Service Types</h3>
+                    <p class="text-xs text-gray-500 dark:text-slate-400 mb-4">Distribution by category</p>
+                    <div class="relative h-56 sm:h-64 flex items-center justify-center">
+                        <p class="text-sm text-gray-500" data-service-chart-empty>No service data yet.</p>
+                        <canvas id="serviceChart" class="max-h-full hidden"></canvas>
+                    </div>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div class="glass-card rounded-3xl p-6">
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Fuel Types</h3>
-                    <div class="relative h-48"><canvas id="fuelChart"></canvas></div>
-                </div>
-                <div class="lg:col-span-2 glass-card rounded-3xl p-6">
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Recent Services</h3>
-                    <div class="space-y-4 max-h-64 overflow-y-auto">
-                        @forelse($recentActivity ?? [] as $activity)
-                        <div class="flex gap-3 items-start">
-                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center flex-shrink-0">
-                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            </div>
-                            <div>
-                                <a href="{{ route('vehicles.show', $activity->vehicle) }}" class="font-medium text-gray-900 dark:text-white hover:text-blue-500">{{ $activity->vehicle->name }}</a>
-                                <span class="text-gray-500 dark:text-gray-400"> — {{ $activity->service_type }}</span>
-                                <p class="text-xs text-gray-400">{{ $activity->created_at->diffForHumans() }}</p>
-                            </div>
-                        </div>
-                        @empty
-                        <p class="text-sm text-gray-500">No recent activity.</p>
-                        @endforelse
->>>>>>> ec6237d (Third Week of Assignment small changes)
+                <livewire:upcoming-reminders />
+
+                <div class="lg:col-span-2 glass-card rounded-3xl p-5 sm:p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Recent Services</h3>
+                        <a href="{{ route('vehicles.index') }}" class="text-xs font-semibold text-blue-500 hover:text-blue-400">View all →</a>
+                    </div>
+                    <div class="space-y-4 max-h-64 overflow-y-auto pr-1" data-recent-services>
+                        <p class="text-sm text-gray-500 py-6 text-center">Loading dashboard data...</p>
                     </div>
                 </div>
             </div>
 
-<<<<<<< HEAD
-            <!-- Maintenance Reminders Alert -->
-            @if(count($upcomingReminders) > 0)
-            <div class="bg-amber-50 border-l-4 border-amber-500 rounded-xl shadow-sm p-5">
-                <div class="flex items-start">
-                    <div class="flex-shrink-0">
-                        <svg class="h-6 w-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                        </svg>
-                    </div>
-                    <div class="ml-4 flex-1">
-                        <h3 class="text-base font-semibold text-amber-900 mb-3">⚠️ Upcoming Maintenance Reminders</h3>
-                        <div class="space-y-2">
-                            @foreach($upcomingReminders as $reminder)
-                            <div class="flex items-center justify-between bg-white rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow">
-                                <div class="flex-1">
-                                    <p class="font-medium text-gray-900">{{ $reminder['vehicle'] }}</p>
-                                    <p class="text-sm text-gray-600 mt-0.5">{{ $reminder['service_type'] }} • Due: {{ $reminder['due_date'] }}</p>
-                                </div>
-                                <span class="px-3 py-1.5 rounded-full text-xs font-semibold {{ $reminder['days_remaining'] == 0 ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700' }}">
-                                    {{ $reminder['days_remaining'] == 0 ? '🔴 Overdue' : '🟡 ' . $reminder['days_remaining'] . ' days' }}
-                                </span>
-                            </div>
-                            @endforeach
-                        </div>
-                    </div>
-=======
-            @if(isset($activityLogs) && $activityLogs->isNotEmpty())
-            <div class="glass-card rounded-3xl p-6">
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Activity Log</h3>
-                <div class="space-y-3">
-                    @foreach($activityLogs as $log)
-                    <div class="flex justify-between items-start py-2 border-b border-gray-100 dark:border-white/5 last:border-0">
-                        <div>
-                            <p class="text-sm font-medium text-gray-900 dark:text-white">{{ $log->description }}</p>
-                            <p class="text-xs text-gray-500">{{ $log->user?->name ?? 'System' }} · {{ $log->action }}</p>
-                        </div>
-                        <span class="text-xs text-gray-400">{{ $log->created_at->diffForHumans() }}</span>
-                    </div>
-                    @endforeach
->>>>>>> ec6237d (Third Week of Assignment small changes)
-                </div>
-            </div>
-            @endif
+            <livewire:recent-activity />
 
-<<<<<<< HEAD
-            <!-- Charts Section -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <!-- Monthly Cost Chart -->
-                <div class="bg-white rounded-xl shadow-md p-6">
-                    <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center">
-                        <svg class="h-5 w-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                        </svg>
-                        Monthly Maintenance Costs
-                    </h3>
-                    <div class="relative h-64">
-                        <canvas id="monthlyCostChart"></canvas>
-                    </div>
-                </div>
-
-                <!-- Service Type Chart -->
-                <div class="bg-white rounded-xl shadow-md p-6">
-                    <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center">
-                        <svg class="h-5 w-5 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path>
-                        </svg>
-                        Service Distribution
-                    </h3>
-                    <div class="relative h-64">
-                        <canvas id="serviceTypeChart"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Two Column Layout -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                
-                <!-- Service Type Breakdown -->
-                <div class="bg-white rounded-xl shadow-md p-6">
-                    <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center">
-                        <svg class="h-5 w-5 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>
-                        </svg>
-                        Service Type Breakdown
-                    </h3>
-                    @if($serviceTypeBreakdown->count() > 0)
-                    <div class="space-y-2">
-                        @foreach($serviceTypeBreakdown as $service)
-                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                            <div class="flex-1">
-                                <p class="font-medium text-gray-900 text-sm">{{ $service->service_type }}</p>
-                                <p class="text-xs text-gray-600 mt-0.5">{{ $service->count }} services</p>
-                            </div>
-                            <div class="text-right">
-                                <p class="font-semibold text-purple-600 text-sm">RM {{ number_format($service->total_cost, 2) }}</p>
-                            </div>
-                        </div>
-                        @endforeach
-                    </div>
-                    @else
-                    <div class="text-center py-8">
-                        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                        </svg>
-                        <p class="text-gray-500 mt-3 text-sm">No service records yet</p>
-                    </div>
-                    @endif
-                </div>
-
-                <!-- Recent Vehicles -->
-                <div class="bg-white rounded-xl shadow-md p-6">
-                    <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center">
-                        <svg class="h-5 w-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                        Recent Vehicles
-                    </h3>
-                    @if($recentVehicles->count() > 0)
-                    <div class="space-y-2">
-                        @foreach($recentVehicles as $vehicle)
-                        <a href="{{ route('vehicles.show', $vehicle) }}" class="block p-3 bg-gray-50 rounded-lg hover:bg-blue-50 hover:shadow-md transition-all border border-gray-200">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="font-semibold text-gray-900 text-sm">{{ $vehicle->name }}</p>
-                                    <p class="text-xs text-gray-600 mt-0.5">{{ $vehicle->make }} {{ $vehicle->model }} • {{ $vehicle->number_plate }}</p>
-                                </div>
-                                <svg class="h-5 w-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                </svg>
-                            </div>
-                        </a>
-                        @endforeach
-                    </div>
-                    @else
-                    <div class="text-center py-8">
-                        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
-                        </svg>
-                        <p class="text-gray-500 mt-3 text-sm">No vehicles yet</p>
-                        <a href="{{ route('vehicles.create') }}" class="mt-3 inline-block text-blue-600 hover:text-blue-700 font-medium text-sm">Add your first vehicle →</a>
-                    </div>
-                    @endif
-                </div>
-            </div>
-
-            <!-- Recent Service History -->
-            <div class="bg-white rounded-xl shadow-md p-6">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-lg font-bold text-gray-900 flex items-center">
-                        <svg class="h-5 w-5 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        Recent Service History
-                    </h3>
-                    @if($recentServices->count() > 0)
-                    <a href="{{ route('vehicles.index') }}" class="text-sm text-blue-600 hover:text-blue-700 font-medium">View All →</a>
-                    @endif
-                </div>
-                @if($recentServices->count() > 0)
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Date</th>
-                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Vehicle</th>
-                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Service Type</th>
-                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider hidden md:table-cell">Provider</th>
-                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Cost</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            @foreach($recentServices as $service)
-                            <tr class="hover:bg-gray-50 transition-colors">
-                                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">{{ $service->service_date->format('M d, Y') }}</td>
-                                <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">{{ $service->vehicle->name }}</td>
-                                <td class="px-4 py-3 whitespace-nowrap">
-                                    <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                        {{ $service->service_type }}
-                                    </span>
-                                </td>
-                                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-600 hidden md:table-cell">{{ $service->service_provider ?? 'N/A' }}</td>
-                                <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-900">RM {{ number_format($service->cost, 2) }}</td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-                @else
-                <div class="text-center py-12">
-                    <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                    </svg>
-                    <p class="text-gray-500 mt-3 text-sm">No service records yet</p>
-                    <a href="{{ route('vehicles.index') }}" class="mt-3 inline-block text-blue-600 hover:text-blue-700 font-medium text-sm">Add a service record →</a>
-                </div>
-                @endif
-            </div>
-
-        </div>
-    </div>
-
-    <!-- Chart.js CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    
-    <!-- Initialize Charts -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Monthly Cost Chart Data
-            const monthlyLabels = @json(collect($monthlyCosts)->pluck('month'));
-            const monthlyData = @json(collect($monthlyCosts)->pluck('cost'));
-
-            // Monthly Cost Bar Chart
-            const monthlyCtx = document.getElementById('monthlyCostChart').getContext('2d');
-            new Chart(monthlyCtx, {
-                type: 'bar',
-                data: {
-                    labels: monthlyLabels,
-                    datasets: [{
-                        label: 'Maintenance Cost (RM)',
-                        data: monthlyData.map(parseFloat),
-                        backgroundColor: 'rgba(59, 130, 246, 0.8)',
-                        borderColor: 'rgba(59, 130, 246, 1)',
-                        borderWidth: 2,
-                        borderRadius: 8,
-                        borderSkipped: false,
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'top',
-                            labels: {
-                                font: {
-                                    size: 12,
-                                    family: "'Inter', sans-serif"
-                                }
-                            }
-                        },
-                        tooltip: {
-                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                            padding: 12,
-                            titleFont: { size: 13 },
-                            bodyFont: { size: 12 },
-                            callbacks: {
-                                label: function(context) {
-                                    return 'RM ' + context.parsed.y.toFixed(2);
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                color: 'rgba(0, 0, 0, 0.05)',
-                                drawBorder: false
-                            },
-                            ticks: {
-                                font: { size: 11 },
-                                callback: function(value) {
-                                    return 'RM ' + value;
-                                }
-                            }
-                        },
-                        x: {
-                            grid: {
-                                display: false
-                            },
-                            ticks: {
-                                font: { size: 11 }
-                            }
-                        }
-                    }
-                }
-            });
-
-            // Service Type Chart Data
-            const serviceTypes = @json($serviceTypeBreakdown->pluck('service_type'));
-            const serviceCounts = @json($serviceTypeBreakdown->pluck('count'));
-            const serviceColors = [
-                'rgba(59, 130, 246, 0.8)',
-                'rgba(16, 185, 129, 0.8)',
-                'rgba(139, 92, 246, 0.8)',
-                'rgba(245, 158, 11, 0.8)',
-                'rgba(239, 68, 68, 0.8)',
-                'rgba(236, 72, 153, 0.8)',
-            ];
-
-            // Service Type Doughnut Chart
-            const serviceCtx = document.getElementById('serviceTypeChart').getContext('2d');
-            new Chart(serviceCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: serviceTypes.length > 0 ? serviceTypes : ['No Data'],
-                    datasets: [{
-                        data: serviceCounts.length > 0 ? serviceCounts : [1],
-                        backgroundColor: serviceCounts.length > 0 ? serviceColors : ['rgba(200, 200, 200, 0.5)'],
-                        borderWidth: 3,
-                        borderColor: '#ffffff',
-                        hoverOffset: 8
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                padding: 15,
-                                usePointStyle: true,
-                                pointStyle: 'circle',
-                                font: {
-                                    size: 11,
-                                    family: "'Inter', sans-serif"
-                                }
-                            }
-                        },
-                        tooltip: {
-                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                            padding: 12,
-                            titleFont: { size: 13 },
-                            bodyFont: { size: 12 }
-                        }
-                    }
-                }
-            });
-        });
-    </script>
-=======
         </div>
     </div>
 
     @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const isDark = document.documentElement.classList.contains('dark');
-            const gridColor = isDark ? 'rgba(148,163,184,0.1)' : 'rgba(148,163,184,0.2)';
-            const labelColor = isDark ? '#94a3b8' : '#64748b';
-            const chartData = @json($chartData ?? []);
-            const serviceDist = @json(array_values($serviceDistribution ?? []));
-            const serviceLabels = @json(array_keys($serviceDistribution ?? []));
-            const fuelDist = @json(array_values($fuelDistribution ?? []));
-            const fuelLabels = @json(array_keys($fuelDistribution ?? []));
-
-            const costCtx = document.getElementById('costChart');
-            if (costCtx) new Chart(costCtx, {
-                type: 'bar',
-                data: { labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'], datasets: [{ data: chartData, backgroundColor: 'rgba(59,130,246,0.7)', borderRadius: 8 }] },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: gridColor }, ticks: { color: labelColor } }, x: { ticks: { color: labelColor }, grid: { display: false } } } }
-            });
-
-            const serviceCtx = document.getElementById('serviceChart');
-            if (serviceCtx && serviceLabels.length) new Chart(serviceCtx, {
-                type: 'doughnut',
-                data: { labels: serviceLabels, datasets: [{ data: serviceDist, backgroundColor: ['#3b82f6','#06b6d4','#6366f1','#8b5cf6','#ec4899','#f59e0b'] }] },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: labelColor } } } }
-            });
-
-            const fuelCtx = document.getElementById('fuelChart');
-            if (fuelCtx && fuelLabels.length) new Chart(fuelCtx, {
-                type: 'pie',
-                data: { labels: fuelLabels, datasets: [{ data: fuelDist, backgroundColor: ['#2563eb','#0891b2','#4f46e5','#7c3aed','#db2777'] }] },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: labelColor } } } }
-            });
-        });
-    </script>
     @endpush
->>>>>>> ec6237d (Third Week of Assignment small changes)
 </x-app-layout>

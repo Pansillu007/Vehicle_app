@@ -1,15 +1,5 @@
-<<<<<<< HEAD
-import Alpine from 'alpinejs';
-
-window.Alpine = Alpine;
-Alpine.start();
-=======
-// ========================================
 // VehiclePro — Dark Mode Manager
-// ========================================
-
-// Initialize theme from localStorage before page renders (prevents flash)
-(function() {
+(function () {
     const theme = localStorage.getItem('vehiclepro-theme');
     if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
         document.documentElement.classList.add('dark');
@@ -18,8 +8,7 @@ Alpine.start();
     }
 })();
 
-// Theme toggle function (globally available)
-window.toggleDarkMode = function() {
+window.toggleDarkMode = function () {
     const html = document.documentElement;
     if (html.classList.contains('dark')) {
         html.classList.remove('dark');
@@ -33,7 +22,20 @@ window.toggleDarkMode = function() {
     }));
 };
 
-window.isDarkMode = function() {
+window.isDarkMode = function () {
     return document.documentElement.classList.contains('dark');
 };
->>>>>>> ec6237d (Third Week of Assignment small changes)
+
+import { bootstrapApiTokenFromMeta, bindLogoutTokenClear } from './api/auth.js';
+
+bootstrapApiTokenFromMeta();
+bindLogoutTokenClear();
+
+// API-driven CRUD modules (depend on routes/api.php)
+import './pages/dashboard.js';
+import './pages/vehicles-index.js';
+import './pages/vehicle-form.js';
+import './pages/vehicle-show.js';
+import './pages/service-form.js';
+import './pages/profile-forms.js';
+import './pages/trash-index.js';

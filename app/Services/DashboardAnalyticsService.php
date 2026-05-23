@@ -8,12 +8,15 @@ use App\Models\Vehicle;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
+/**
+ * Aggregates dashboard metrics with eager-loaded relationships to avoid N+1 queries.
+ */
 class DashboardAnalyticsService
 {
     public function forUser(User $user): array
     {
         $vehicleQuery = $user->isAdmin()
-            ? Vehicle::query()
+            ? Vehicle::query()->with('user')
             : $user->vehicles();
 
         $vehicles = (clone $vehicleQuery)->with(['serviceRecords' => fn ($q) => $q->latest()->limit(1)])->get();
@@ -23,26 +26,25 @@ class DashboardAnalyticsService
         $totalServiceRecords = (clone $serviceQuery)->count();
         $maintenanceCost = (float) (clone $serviceQuery)->sum('cost');
 
-        $monthlyCost = ServiceRecord::query()
+        $yearRecords = ServiceRecord::query()
             ->whereIn('vehicle_id', $vehicleIds)
-            ->selectRaw('MONTH(service_date) as month, SUM(cost) as total')
-            ->whereYear('service_date', date('Y'))
-            ->groupBy('month')
-            ->pluck('total', 'month')
-            ->toArray();
+            ->whereYear('service_date', (int) date('Y'))
+            ->get(['service_date', 'cost', 'service_type']);
+
+        $monthlyCost = $yearRecords
+            ->groupBy(fn ($record) => $record->service_date->month)
+            ->map(fn ($group) => (float) $group->sum('cost'));
 
         $chartData = [];
         for ($i = 1; $i <= 12; $i++) {
             $chartData[] = (float) ($monthlyCost[$i] ?? 0);
         }
 
-        $serviceDistribution = ServiceRecord::query()
-            ->whereIn('vehicle_id', $vehicleIds)
-            ->selectRaw('service_type, count(*) as total')
+        $serviceDistribution = $yearRecords
             ->groupBy('service_type')
-            ->orderByDesc('total')
-            ->limit(8)
-            ->pluck('total', 'service_type')
+            ->map(fn ($group) => $group->count())
+            ->sortDesc()
+            ->take(8)
             ->toArray();
 
         $fuelDistribution = $vehicles->groupBy('fuel_type')->map->count()->toArray();
@@ -123,12 +125,17 @@ class DashboardAnalyticsService
             return null;
         }
 
-        return ServiceRecord::query()
+        $totals = ServiceRecord::query()
             ->whereIn('vehicle_id', $vehicleIds)
             ->selectRaw('vehicle_id, SUM(cost) as total_cost')
             ->groupBy('vehicle_id')
             ->orderByDesc('total_cost')
-            ->with('vehicle')
             ->first();
+
+        if ($totals) {
+            $totals->load('vehicle');
+        }
+
+        return $totals;
     }
 }

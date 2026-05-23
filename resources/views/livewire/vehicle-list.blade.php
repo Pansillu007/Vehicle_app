@@ -25,7 +25,10 @@
         </div>
     </div>
 
-    <div wire:loading class="text-sm text-blue-500 mb-4">Searching...</div>
+    <div wire:loading class="livewire-loading mb-4">
+        <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+        Updating results...
+    </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         @forelse($vehicles as $vehicle)
@@ -38,7 +41,10 @@
                         <h3 class="font-bold text-gray-900 dark:text-white">{{ $vehicle->name }}</h3>
                         <span class="text-xs px-2 py-1 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 font-mono">{{ $vehicle->number_plate }}</span>
                     </div>
-                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">{{ $vehicle->make }} {{ $vehicle->model }} · {{ $vehicle->year }}</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">{{ $vehicle->make }} {{ $vehicle->model }} · {{ $vehicle->year }}</p>
+                    @if($vehicle->fuel_type)
+                        <span class="badge-blue mb-3 inline-block">{{ $vehicle->fuel_type }}</span>
+                    @endif
                     @if(auth()->user()->isAdmin() && $vehicle->user)
                         <p class="text-xs text-gray-400 mb-3">Owner: {{ $vehicle->user->name }}</p>
                     @endif

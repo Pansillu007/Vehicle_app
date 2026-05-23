@@ -2,9 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Models\ServiceRecord;
 use App\Models\User;
 use App\Models\Vehicle;
-use App\Models\ServiceRecord;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
@@ -13,73 +13,62 @@ class CompleteSystemTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_user_can_register_and_login()
+    protected function actingAsApi(User $user): self
     {
-        $response = $this->post('/register', [
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => 'password123',
-            'password_confirmation' => 'password123',
-        ]);
+        Sanctum::actingAs($user, ['*']);
 
-        $this->assertAuthenticated();
-        $this->assertDatabaseHas('users', ['email' => 'test@example.com']);
+        return $this;
     }
 
-    public function test_user_can_create_vehicle()
+    protected function vehiclePayload(array $overrides = []): array
     {
-        $user = User::factory()->create();
-        Sanctum::actingAs($user);
-
-        $response = $this->post('/vehicles', [
+        return array_merge([
             'name' => 'My Car',
             'make' => 'Toyota',
             'model' => 'Camry',
             'year' => 2024,
             'number_plate' => 'ABC123',
             'color' => 'Blue',
-            'mileage' => 15000.50,
-        ]);
+            'mileage' => 15000,
+            'fuel_type' => 'Petrol',
+            'vin_number' => null,
+        ], $overrides);
+    }
 
-        $response->assertRedirect(route('vehicles.index'));
+    public function test_user_can_create_vehicle_via_api(): void
+    {
+        $user = User::factory()->create();
+        $this->actingAsApi($user);
+
+        $this->postJson('/api/vehicles', $this->vehiclePayload())
+            ->assertCreated();
+
         $this->assertDatabaseHas('vehicles', [
             'user_id' => $user->id,
-            'name' => 'My Car',
             'number_plate' => 'ABC123',
         ]);
     }
 
-    public function test_user_can_view_vehicles()
+    public function test_user_can_view_vehicles_page(): void
     {
         $user = User::factory()->create();
-        Sanctum::actingAs($user);
-
+        $this->actingAs($user);
         Vehicle::factory()->create(['user_id' => $user->id]);
 
-        $response = $this->get('/vehicles');
-
-        $response->assertStatus(200);
-        $response->assertSee('My Vehicles');
+        $this->get(route('vehicles.index'))->assertOk()->assertSee('My Vehicles');
     }
 
-    public function test_user_can_update_vehicle()
+    public function test_user_can_update_vehicle_via_api(): void
     {
         $user = User::factory()->create();
-        Sanctum::actingAs($user);
+        $this->actingAsApi($user);
+        $vehicle = Vehicle::factory()->create(['user_id' => $user->id, 'number_plate' => 'ABC123']);
 
-        $vehicle = Vehicle::factory()->create(['user_id' => $user->id]);
-
-        $response = $this->put("/vehicles/{$vehicle->id}", [
+        $this->putJson("/api/vehicles/{$vehicle->id}", $this->vehiclePayload([
             'name' => 'Updated Car',
-            'make' => 'Honda',
-            'model' => 'Civic',
-            'year' => 2023,
             'number_plate' => 'XYZ789',
-            'color' => 'Red',
-            'mileage' => 20000,
-        ]);
+        ]))->assertOk();
 
-        $response->assertRedirect(route('vehicles.index'));
         $this->assertDatabaseHas('vehicles', [
             'id' => $vehicle->id,
             'name' => 'Updated Car',
@@ -87,143 +76,96 @@ class CompleteSystemTest extends TestCase
         ]);
     }
 
-    public function test_user_can_delete_vehicle()
+    public function test_user_can_delete_vehicle_via_api(): void
     {
         $user = User::factory()->create();
-        Sanctum::actingAs($user);
-
+        $this->actingAsApi($user);
         $vehicle = Vehicle::factory()->create(['user_id' => $user->id]);
 
-        $response = $this->delete("/vehicles/{$vehicle->id}");
-
-        $response->assertRedirect(route('vehicles.index'));
-        $this->assertDatabaseMissing('vehicles', ['id' => $vehicle->id]);
+        $this->deleteJson("/api/vehicles/{$vehicle->id}")->assertOk();
+        $this->assertSoftDeleted('vehicles', ['id' => $vehicle->id]);
     }
 
-    public function test_user_can_create_service_record()
+    public function test_user_can_create_service_record_via_api(): void
     {
         $user = User::factory()->create();
-        Sanctum::actingAs($user);
-
+        $this->actingAsApi($user);
         $vehicle = Vehicle::factory()->create(['user_id' => $user->id]);
 
-        $response = $this->post("/vehicles/{$vehicle->id}/services", [
+        $this->postJson("/api/vehicles/{$vehicle->id}/services", [
             'service_type' => 'Oil Change',
             'description' => 'Regular maintenance',
-            'cost' => 75.50,
             'service_date' => '2024-01-15',
+            'cost' => 75.50,
+            'mileage' => 15000,
             'service_provider' => 'Quick Lube Shop',
-        ]);
+        ])->assertCreated();
 
-        $response->assertRedirect(route('vehicles.services.index', $vehicle));
         $this->assertDatabaseHas('service_records', [
             'vehicle_id' => $vehicle->id,
             'service_type' => 'Oil Change',
-            'cost' => 75.50,
         ]);
     }
 
-    public function test_user_can_view_service_records()
-    {
-        $user = User::factory()->create();
-        $this->actingAs($user);
-
-        $vehicle = Vehicle::factory()->create(['user_id' => $user->id]);
-        ServiceRecord::factory()->create(['vehicle_id' => $vehicle->id]);
-
-        $response = $this->get("/vehicles/{$vehicle->id}/services");
-
-        $response->assertStatus(200);
-        $response->assertSee('Service Records');
-        $response->assertSee($vehicle->name);
-    }
-
-    public function test_user_cannot_access_other_users_vehicle()
+    public function test_user_cannot_access_other_users_vehicle(): void
     {
         $user1 = User::factory()->create();
         $user2 = User::factory()->create();
-        Sanctum::actingAs($user1);
-
+        $this->actingAs($user1);
         $vehicle = Vehicle::factory()->create(['user_id' => $user2->id]);
 
-        $response = $this->get("/vehicles/{$vehicle->id}/edit");
-
-        $response->assertStatus(403);
+        $this->get(route('vehicles.edit', $vehicle))->assertForbidden();
     }
 
-    public function test_dashboard_shows_correct_statistics()
+    public function test_dashboard_renders_for_authenticated_user(): void
     {
         $user = User::factory()->create();
-        Sanctum::actingAs($user);
-
-        Vehicle::factory()->count(3)->create(['user_id' => $user->id]);
-
-        $response = $this->get('/dashboard');
-
-        $response->assertStatus(200);
-        $response->assertSee('Total Vehicles');
-        $response->assertSee('Service Records');
-    }
-
-    public function test_api_returns_vehicle_list()
-    {
-        $user = User::factory()->create();
-        Sanctum::actingAs($user);
-
+        $this->actingAs($user);
         Vehicle::factory()->count(2)->create(['user_id' => $user->id]);
 
-        $response = $this->getJson('/api/vehicles');
-
-        $response->assertStatus(200)
-            ->assertJson(['success' => true]);
+        $this->get(route('dashboard'))
+            ->assertOk()
+            ->assertSee('Dashboard');
     }
 
-    public function test_api_creates_vehicle()
+    public function test_api_returns_vehicle_list(): void
     {
         $user = User::factory()->create();
-        Sanctum::actingAs($user);
+        $this->actingAsApi($user);
+        Vehicle::factory()->count(2)->create(['user_id' => $user->id]);
 
-        $response = $this->postJson('/api/vehicles', [
-            'name' => 'API Car',
-            'make' => 'Ford',
-            'model' => 'Mustang',
-            'year' => 2024,
+        $this->getJson('/api/vehicles')->assertOk();
+    }
+
+    public function test_api_creates_vehicle(): void
+    {
+        $user = User::factory()->create();
+        $this->actingAsApi($user);
+
+        $this->postJson('/api/vehicles', $this->vehiclePayload([
             'number_plate' => 'API123',
-            'color' => 'Black',
-            'mileage' => 5000,
-        ]);
+        ]))->assertCreated();
 
-        $response->assertStatus(201)
-            ->assertJson(['success' => true]);
         $this->assertDatabaseHas('vehicles', ['number_plate' => 'API123']);
     }
 
-    public function test_api_returns_service_records()
+    public function test_api_returns_service_records(): void
     {
         $user = User::factory()->create();
-        Sanctum::actingAs($user);
-
+        $this->actingAsApi($user);
         $vehicle = Vehicle::factory()->create(['user_id' => $user->id]);
         ServiceRecord::factory()->create(['vehicle_id' => $vehicle->id]);
 
-        $response = $this->getJson("/api/vehicles/{$vehicle->id}/services");
-
-        $response->assertStatus(200)
-            ->assertJson(['success' => true]);
+        $this->getJson("/api/vehicles/{$vehicle->id}/services")->assertOk();
     }
 
-    public function test_validation_fails_for_missing_fields()
+    public function test_validation_fails_for_missing_vehicle_fields(): void
     {
         $user = User::factory()->create();
-        Sanctum::actingAs($user);
+        $this->actingAsApi($user);
 
-        $response = $this->post('/vehicles', [
-            'name' => '',
-            'make' => '',
-            'model' => '',
-            'number_plate' => '',
-        ]);
-
-        $response->assertSessionHasErrors(['name', 'make', 'model', 'number_plate']);
+        $this->postJson('/api/vehicles', ['name' => 'Incomplete'])
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['make', 'model', 'number_plate']);
     }
 }

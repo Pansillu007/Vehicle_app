@@ -21,6 +21,10 @@ class VehicleResource extends JsonResource
             'fuel_type' => $this->fuel_type,
             'vin_number' => $this->vin_number,
             'image_url' => $this->image_url,
+            'user' => $this->whenLoaded('user', fn () => [
+                'id' => $this->user->id,
+                'name' => $this->user->name,
+            ]),
             'next_service_due_date' => $this->next_service_due_date?->toDateString(),
             'next_service_due_mileage' => $this->next_service_due_mileage,
             'total_maintenance_cost' => $this->whenLoaded('serviceRecords', fn () => (float) $this->serviceRecords->sum('cost')),

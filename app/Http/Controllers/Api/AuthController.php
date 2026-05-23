@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -10,9 +12,6 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
-    /**
-     * Register a new user
-     */
     public function register(Request $request)
     {
         $request->validate([
@@ -25,24 +24,22 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => 'user',
+            'role' => UserRole::User,
         ]);
 
-        $token = $user->createToken('mobile-app')->plainTextToken;
+        $user->tokens()->where('name', 'frontend')->delete();
+        $token = $user->createToken('frontend', ['*'])->plainTextToken;
 
         return response()->json([
             'success' => true,
             'message' => 'User registered successfully',
             'data' => [
-                'user' => $user,
+                'user' => (new UserResource($user))->resolve(),
                 'token' => $token,
             ],
         ], 201);
     }
 
-    /**
-     * Login user
-     */
     public function login(Request $request)
     {
         $request->validate([
@@ -52,27 +49,25 @@ class AuthController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
+        if (! $user || ! Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
                 'email' => ['The provided credentials are incorrect.'],
             ]);
         }
 
-        $token = $user->createToken('mobile-app')->plainTextToken;
+        $user->tokens()->where('name', 'frontend')->delete();
+        $token = $user->createToken('frontend', ['*'])->plainTextToken;
 
         return response()->json([
             'success' => true,
             'message' => 'Login successful',
             'data' => [
-                'user' => $user,
+                'user' => (new UserResource($user))->resolve(),
                 'token' => $token,
             ],
         ]);
     }
 
-    /**
-     * Logout user
-     */
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
@@ -80,17 +75,6 @@ class AuthController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Logged out successfully',
-        ]);
-    }
-
-    /**
-     * Get authenticated user
-     */
-    public function user(Request $request)
-    {
-        return response()->json([
-            'success' => true,
-            'data' => $request->user(),
         ]);
     }
 }
