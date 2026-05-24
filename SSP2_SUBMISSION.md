@@ -1,7 +1,7 @@
 # VehiclePro — SSP2 Submission Guide
 
 **Student project:** Vehicle Management System  
-**Stack:** Laravel 13 · Jetstream (Livewire) · Sanctum · REST API · Axios SPA layer  
+**Stack:** Laravel 13 (12-compatible) · Jetstream (Livewire) · Sanctum · REST API · Axios SPA-lite layer  
 **Repository folder:** `vehiclepro/`
 
 This document is written for **lecturers and viva examiners**. It maps every SSP2 requirement to concrete files and demo steps.
@@ -44,7 +44,7 @@ routes/api.php  ──► Api*Controller ──► Models / Policies / Resources
     │
 routes/web.php  ──► PageController (views only, GET)
     │
-Fortify/Jetstream ──► Session auth for login/register/profile
+Fortify/Jetstream ──► Session auth + profile/2FA; email login via API + session bootstrap
 ```
 
 **Rule:** All **mutations** (create, update, delete, restore, export data) go through **`/api/*`** with `auth:sanctum`.  
@@ -81,8 +81,8 @@ JSON envelope: `{ success, message, data }` via `RespondsWithApiJson`.
 
 - Package: `laravel/sanctum`
 - Middleware: `auth:sanctum` on protected API group
-- Token name: `frontend`
-- SPA flow: `ApiTokenComposer` → meta tag → `localStorage` → Axios `Authorization: Bearer`
+- Token name: `vehiclepro-token` (stored in `localStorage` as `vehiclepro_api_token`)
+- SPA flow: `POST /api/login` → token in `localStorage` → `POST /auth/session/bootstrap` → web session → `ApiTokenComposer` meta tag → Axios `Authorization: Bearer`
 - Logout: `revokeApiToken()` in `resources/js/api/auth.js` calls `POST /api/logout` before Fortify logout
 - API clients: `POST /api/login` returns `{ data: { token, user } }`
 
@@ -119,11 +119,12 @@ JSON envelope: `{ success, message, data }` via `RespondsWithApiJson`.
 - `VehicleResource`, `ServiceRecordResource`, `UserResource`
 - Auth login/register return `UserResource` shape
 
-### 7. Jetstream + Livewire
+### 7. Jetstream + Livewire (≥5 components)
 
 - Stack: `livewire` in `config/jetstream.php`
-- Livewire: notification bell, 2FA, account deletion, API token manager
-- Profile name/email: API forms; security features: Livewire
+- **Integrated in UI:** `NotificationBell` (nav), profile 2FA, logout other sessions, delete account, API token manager (Jetstream)
+- **App components (6):** `DashboardStats`, `RecentActivity`, `UpcomingReminders`, `VehicleList`, `VehicleServices`, `NotificationBell` — see `app/Livewire/`
+- Profile name/email: API (`profile-forms.js`); security: Livewire
 
 ### 8. UI/UX
 
@@ -185,7 +186,7 @@ A: In `ApiVehicleController` and `ApiServiceController`; the browser calls them 
 A: Disable `Route::apiResource('vehicles'...)` in `api.php` — pages load but lists and forms fail. Tests in `FrontendApiDependencyTest`.
 
 **Q: How does Sanctum work with Jetstream?**  
-A: User logs in with Fortify (session). `ApiTokenComposer` issues a Sanctum token stored in session and exposed in the layout meta tag. JavaScript copies it to `localStorage` for API calls.
+A: Email/password login calls `POST /api/login` (Bearer token). JS stores the token, then `POST /auth/session/bootstrap` creates the web session for Blade routes. `ApiTokenComposer` syncs the token to the layout meta tag; Axios sends `Authorization: Bearer` on API calls. Google OAuth uses session login + the same meta/localStorage sync.
 
 **Q: Nested services REST design?**  
 A: Services belong to a vehicle; routes are `/api/vehicles/{vehicle}/services/{service}` so ownership is enforced at the URL and policy level.

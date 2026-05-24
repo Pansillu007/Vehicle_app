@@ -31,18 +31,30 @@
                 <a href="{{ route('admin.vehicles.index') }}" class="btn-secondary">All Vehicles</a>
                 <a href="{{ route('dashboard') }}" class="btn-secondary">User Dashboard</a>
             </div>
-            <div class="glass-card rounded-3xl p-6 overflow-hidden">
-                <h3 class="font-semibold text-gray-900 dark:text-white mb-4">Recent Users</h3>
-                <div class="overflow-x-auto -mx-2">
+            <div class="glass-card rounded-3xl p-4 sm:p-6 overflow-hidden">
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-4 px-2">Recent Users</h3>
+                <div class="table-container">
                     <table class="premium-table min-w-full">
-                        <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Joined</th></tr></thead>
+                        <thead>
+                            <tr>
+                                <th class="px-4 py-3 sm:px-6">User</th>
+                                <th class="hide-on-mobile">Email</th>
+                                <th class="hide-on-mobile">Role</th>
+                                <th class="text-right px-4 py-3 sm:px-6">Joined</th>
+                            </tr>
+                        </thead>
                         <tbody>
                             @foreach($recentUsers as $u)
                             <tr>
-                                <td class="font-medium text-gray-900 dark:text-white">{{ $u->name }}</td>
-                                <td>{{ $u->email }}</td>
-                                <td><span class="badge-blue">{{ $u->role?->label() ?? $u->role }}</span></td>
-                                <td class="whitespace-nowrap">{{ $u->created_at->format('M d, Y') }}</td>
+                                <td class="px-4 py-4 sm:px-6">
+                                    <div class="flex flex-col">
+                                        <span class="font-bold text-gray-900 dark:text-white">{{ $u->name }}</span>
+                                        <span class="sm:hidden text-[10px] text-gray-500 line-clamp-1">{{ $u->email }}</span>
+                                    </div>
+                                </td>
+                                <td class="hide-on-mobile">{{ $u->email }}</td>
+                                <td class="hide-on-mobile"><span class="badge-blue">{{ $u->role?->label() ?? $u->role }}</span></td>
+                                <td class="text-right whitespace-nowrap px-4 py-4 sm:px-6 text-xs text-gray-500 font-medium">{{ $u->created_at->format('M d, Y') }}</td>
                             </tr>
                             @endforeach
                         </tbody>

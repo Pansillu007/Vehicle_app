@@ -9,27 +9,46 @@
                 <button type="submit" class="btn-primary">Search</button>
             </form>
             <div class="glass-card rounded-3xl overflow-hidden">
-                <table class="premium-table">
-                    <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Vehicles</th><th class="text-right">Actions</th></tr></thead>
-                    <tbody>
-                        @foreach($users as $user)
-                        <tr>
-                            <td class="font-medium text-gray-900 dark:text-white">{{ $user->name }}</td>
-                            <td>{{ $user->email }}</td>
-                            <td><span class="text-xs px-2 py-1 rounded-full {{ $user->isAdmin() ? 'bg-blue-500/20 text-blue-400' : 'bg-gray-500/20 text-gray-400' }}">{{ $user->role?->value }}</span></td>
-                            <td>{{ $user->vehicles_count }}</td>
-                            <td class="text-right">
-                                @can('delete', $user)
-                                <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="inline" onsubmit="return confirm('Delete this user?');">
-                                    @csrf @method('DELETE')
-                                    <button type="submit" class="btn-danger text-xs">Delete</button>
-                                </form>
-                                @endcan
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                <div class="table-container">
+                    <table class="premium-table min-w-full">
+                        <thead>
+                            <tr>
+                                <th class="px-4 py-3 sm:px-6">User</th>
+                                <th class="hide-on-mobile">Email</th>
+                                <th class="hide-on-mobile">Role</th>
+                                <th class="hide-on-mobile text-center">Vehicles</th>
+                                <th class="text-right px-4 py-3 sm:px-6">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($users as $user)
+                            <tr>
+                                <td class="px-4 py-4 sm:px-6 font-bold text-gray-900 dark:text-white">
+                                    {{ $user->name }}
+                                    <div class="sm:hidden text-[10px] font-medium text-gray-500 mt-0.5">{{ $user->email }}</div>
+                                </td>
+                                <td class="hide-on-mobile">{{ $user->email }}</td>
+                                <td class="hide-on-mobile"><span class="badge-blue">{{ $user->role?->value ?? $user->role }}</span></td>
+                                <td class="hide-on-mobile text-center font-medium">{{ $user->vehicles_count }}</td>
+                                <td class="text-right px-4 py-4 sm:px-6">
+                                    @can('delete', $user)
+                                    <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="inline" onsubmit="return confirm('Delete this user?');">
+                                        @csrf @method('DELETE')
+                                        <button type="submit" class="text-red-500 text-xs font-bold hover:underline">Delete</button>
+                                    </form>
+                                    @endcan
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="5" class="px-6 py-12 text-center text-gray-500 dark:text-slate-400">
+                                    No users match your search.
+                                </td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div class="mt-6">{{ $users->links() }}</div>
         </div>

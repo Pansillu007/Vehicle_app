@@ -24,7 +24,7 @@ class ApiTrashAndAuthTest extends TestCase
     public function test_logout_revokes_sanctum_token(): void
     {
         $user = User::factory()->create();
-        $token = $user->createToken('frontend', ['*'])->plainTextToken;
+        $token = $user->createToken(\App\Services\FrontendTokenService::TOKEN_NAME, ['*'])->plainTextToken;
 
         $this->withToken($token)
             ->postJson('/api/logout')

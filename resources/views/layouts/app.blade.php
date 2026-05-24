@@ -15,6 +15,14 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         @auth
             <meta name="api-token" content="{{ $apiToken ?? '' }}">
+            <script>
+                (function () {
+                    var t = document.querySelector('meta[name="api-token"]');
+                    if (t && t.content) {
+                        localStorage.setItem('vehiclepro_api_token', t.content);
+                    }
+                })();
+            </script>
         @endauth
         <meta name="description" content="VehiclePro — Premium vehicle management platform. Track vehicles, manage maintenance, monitor service history.">
 

@@ -27,15 +27,24 @@ window.isDarkMode = function () {
 };
 
 import { bootstrapApiTokenFromMeta, bindLogoutTokenClear } from './api/auth.js';
+import { resetUnauthorizedGuard } from './api/client.js';
 
+// Auth forms must register submit handlers before any async page imports finish.
+import './pages/auth-forms.js';
+
+// Sync Bearer token before any page module fires API requests.
 bootstrapApiTokenFromMeta();
 bindLogoutTokenClear();
+resetUnauthorizedGuard();
 
-// API-driven CRUD modules (depend on routes/api.php)
-import './pages/dashboard.js';
-import './pages/vehicles-index.js';
-import './pages/vehicle-form.js';
-import './pages/vehicle-show.js';
-import './pages/service-form.js';
-import './pages/profile-forms.js';
-import './pages/trash-index.js';
+const pageModules = [
+    './pages/dashboard.js',
+    './pages/vehicles-index.js',
+    './pages/vehicle-form.js',
+    './pages/vehicle-show.js',
+    './pages/service-form.js',
+    './pages/profile-forms.js',
+    './pages/trash-index.js',
+];
+
+await Promise.all(pageModules.map((path) => import(path)));

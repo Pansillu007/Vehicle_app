@@ -63,11 +63,11 @@
                     <p class="text-sm text-gray-500 dark:text-gray-400 mt-3">Total filtered cost: <span class="font-bold text-blue-500">$<span data-services-total>0.00</span></span></p>
                 </div>
 
-                <p data-services-loading class="livewire-loading mb-4">Loading services...</p>
+                <p data-services-loading class="api-loading mb-4">Loading services...</p>
 
                 <div class="glass-card rounded-3xl overflow-hidden">
-                    <div class="overflow-x-auto">
-                        <table class="premium-table">
+                    <div class="table-container">
+                        <table class="premium-table min-w-full">
                             <thead>
                                 <tr>
                                     <th>Date</th>

@@ -21,10 +21,12 @@ class ApiTokenComposer
             return;
         }
 
-        if (! session()->has(FrontendTokenService::SESSION_KEY)) {
-            $this->tokens->storeInSession(Auth::user());
+        $token = session(FrontendTokenService::SESSION_KEY);
+
+        if (! $token) {
+            $token = $this->tokens->storeInSession(Auth::user());
         }
 
-        $view->with('apiToken', session(FrontendTokenService::SESSION_KEY));
+        $view->with('apiToken', $token);
     }
 }

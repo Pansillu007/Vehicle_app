@@ -1,5 +1,11 @@
 import axios from 'axios';
-import { getApiToken } from './auth.js';
+import {
+    clearApiToken,
+    getResolvedApiToken,
+    isPublicApiPath,
+    performFullLogout,
+    setApiToken,
+} from './auth.js';
 
 const api = axios.create({
     baseURL: '/api',
@@ -9,10 +15,26 @@ const api = axios.create({
     },
 });
 
+let handlingUnauthorized = false;
+
 api.interceptors.request.use((config) => {
-    const token = getApiToken();
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+    const url = config.url || '';
+
+    if (!isPublicApiPath(url)) {
+        const token = getResolvedApiToken();
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+            setApiToken(token);
+        } else {
+            delete config.headers.Authorization;
+        }
+    } else {
+        delete config.headers.Authorization;
+    }
+
+    const csrf = document.querySelector('meta[name="csrf-token"]')?.content?.trim();
+    if (csrf) {
+        config.headers['X-CSRF-TOKEN'] = csrf;
     }
 
     return config;
@@ -20,16 +42,50 @@ api.interceptors.request.use((config) => {
 
 api.interceptors.response.use(
     (response) => response,
-    (error) => {
-        if (error.response?.status === 401) {
-            const onLoginPage = window.location.pathname.includes('login');
-            if (!onLoginPage) {
-                console.warn('API authentication failed. Ensure api.php routes are active and a valid token is stored.');
+    async (error) => {
+        const status = error.response?.status;
+        const requestUrl = error.config?.url || '';
+
+        if (status === 401 && !isPublicApiPath(requestUrl)) {
+            const onAuthPage = ['/login', '/register', '/two-factor-challenge'].some((path) =>
+                window.location.pathname.includes(path)
+            );
+
+            if (!onAuthPage && !handlingUnauthorized) {
+                const resolvedToken = getResolvedApiToken();
+
+                if (resolvedToken && error.config.headers.Authorization !== `Bearer ${resolvedToken}`) {
+                    error.config.headers.Authorization = `Bearer ${resolvedToken}`;
+                    setApiToken(resolvedToken);
+                    return api.request(error.config);
+                }
+
+                if (resolvedToken && !error.config.__sessionRetried) {
+                    try {
+                        const { bootstrapWebSession, verifyWebSession } = await import('./auth.js');
+                        await bootstrapWebSession(resolvedToken);
+                        if (await verifyWebSession()) {
+                            error.config.__sessionRetried = true;
+                            return api.request(error.config);
+                        }
+                    } catch {
+                        // Fall through to full logout below.
+                    }
+                }
+
+                handlingUnauthorized = true;
+                clearApiToken();
+                await performFullLogout({ redirect: false });
+                window.dispatchEvent(new CustomEvent('api:unauthorized'));
             }
         }
 
         return Promise.reject(error);
     }
 );
+
+export function resetUnauthorizedGuard() {
+    handlingUnauthorized = false;
+}
 
 export default api;

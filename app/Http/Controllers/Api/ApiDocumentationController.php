@@ -19,7 +19,7 @@ class ApiDocumentationController extends Controller
                 'type' => 'Bearer Token',
                 'header' => 'Authorization: Bearer {token}',
                 'obtain_token' => 'POST /api/login or POST /api/register (returns token in data.token)',
-                'spa_flow' => 'After Jetstream web login, a frontend token is issued via session and exposed in the api-token meta tag.',
+                'spa_flow' => 'POST /api/login or /api/register stores vehiclepro_api_token in localStorage; Google OAuth syncs via api-token meta tag.',
                 'logout' => 'POST /api/logout (revokes current token)',
             ],
             'endpoints' => [
@@ -50,14 +50,6 @@ class ApiDocumentationController extends Controller
                     'GET /api/vehicles/{vehicle}/services/{service}' => 'Show service record',
                     'PUT /api/vehicles/{vehicle}/services/{service}' => 'Update service record',
                     'DELETE /api/vehicles/{vehicle}/services/{service}' => 'Soft delete service record',
-                ],
-                'reminders' => [
-                    'GET /api/reminders' => 'List all pending reminders for user',
-                    'POST /api/reminders/{reminder}/complete' => 'Mark a reminder as completed',
-                ],
-                'fuel_logs' => [
-                    'GET /api/vehicles/{vehicle}/fuel-logs' => 'List fuel logs for a vehicle',
-                    'POST /api/vehicles/{vehicle}/fuel-logs' => 'Add new fuel log',
                 ],
                 'trash' => [
                     'GET /api/trash' => 'List soft-deleted vehicles and services (auth)',

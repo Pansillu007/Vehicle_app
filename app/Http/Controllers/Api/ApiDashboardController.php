@@ -22,6 +22,7 @@ class ApiDashboardController extends Controller
         return $this->apiSuccess([
             'totalVehicles' => $raw['totalVehicles'],
             'totalServiceRecords' => $raw['totalServiceRecords'],
+            'pendingReminders' => $raw['pendingReminders'],
             'maintenanceCost' => $raw['maintenanceCost'],
             'chartData' => $raw['chartData'],
             'serviceDistribution' => $raw['serviceDistribution'],
@@ -47,6 +48,13 @@ class ApiDashboardController extends Controller
                 'vehicle_name' => $reminder->vehicle->name,
                 'status' => $reminder->status,
                 'message' => $reminder->message,
+            ])->values(),
+            'upcomingReminders' => collect($raw['upcomingReminders'])->map(fn ($reminder) => [
+                'id' => $reminder->id,
+                'title' => $reminder->title,
+                'type' => $reminder->type,
+                'vehicle_name' => $reminder->vehicle?->name ?? 'System',
+                'due_date' => $reminder->due_date->format('M j'),
             ])->values(),
             'mostExpensiveVehicle' => $raw['mostExpensiveVehicle'] ? [
                 'name' => $raw['mostExpensiveVehicle']->vehicle?->name,

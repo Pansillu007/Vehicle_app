@@ -10,6 +10,7 @@ use App\Policies\UserPolicy;
 use App\Policies\VehiclePolicy;
 use App\Http\View\Composers\ApiTokenComposer;
 use App\Services\ActivityLogger;
+use App\Services\FrontendTokenService;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Support\Facades\Event;
@@ -34,6 +35,10 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('admin', fn (User $user) => $user->isAdmin());
 
         Event::listen(Login::class, function (Login $event) {
+            if (! session()->has(FrontendTokenService::SESSION_KEY)) {
+                app(FrontendTokenService::class)->storeInSession($event->user);
+            }
+
             ActivityLogger::logForUser($event->user, 'login', 'User signed in');
         });
 

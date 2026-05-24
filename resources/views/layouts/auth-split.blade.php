@@ -8,6 +8,27 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    {{-- Block native form POST to Fortify before Vite modules load (prevents login redirect loop). --}}
+    <script>
+        document.addEventListener('submit', function (event) {
+            var form = event.target;
+            if (form && (form.id === 'login-api-form' || form.id === 'register-api-form')) {
+                event.preventDefault();
+            }
+        }, true);
+    </script>
+    @auth
+        <meta name="api-token" content="{{ session(\App\Services\FrontendTokenService::SESSION_KEY, '') }}">
+        <script>
+            (function () {
+                var t = document.querySelector('meta[name="api-token"]');
+                if (t && t.content) {
+                    localStorage.setItem('vehiclepro_api_token', t.content);
+                }
+            })();
+        </script>
+    @endauth
     <title>@yield('title', 'VehiclePro')</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

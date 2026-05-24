@@ -10,7 +10,7 @@
     </x-slot>
 
     <div class="page-container">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 py-4 sm:py-8">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
             @include('profile.api-profile-information-form')
 
             @include('profile.api-update-password-form')

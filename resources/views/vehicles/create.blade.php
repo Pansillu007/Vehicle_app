@@ -57,9 +57,9 @@
                             <input type="text" name="vin_number" id="vin_number" class="form-input-dark uppercase" placeholder="1HGBH41JXMN109186">
                         </div>
                     </div>
-                    <div class="flex items-center justify-end gap-4 pt-6 border-t border-gray-200/80 dark:border-white/[0.06]">
-                        <a href="{{ route('vehicles.index') }}" class="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">Cancel</a>
-                        <button type="submit" class="btn-primary">Save Vehicle</button>
+                    <div class="flex flex-col-reverse sm:flex-row items-center justify-end gap-3 sm:gap-4 pt-6 border-t border-gray-200/80 dark:border-white/[0.06]">
+                        <a href="{{ route('vehicles.index') }}" class="w-full sm:w-auto text-center px-4 py-3 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">Cancel</a>
+                        <button type="submit" class="w-full sm:w-auto btn-primary">Save Vehicle</button>
                     </div>
                 </form>
             </div>

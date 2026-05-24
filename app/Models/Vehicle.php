@@ -81,7 +81,7 @@ class Vehicle extends Model
 
     public function scopeSearch($query, ?string $search)
     {
-        if (! $search) {
+        if (!$search) {
             return $query;
         }
 

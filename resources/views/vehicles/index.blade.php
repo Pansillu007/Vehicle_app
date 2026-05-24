@@ -51,13 +51,29 @@
                     </div>
                 </div>
 
-                <p data-vehicles-loading class="livewire-loading mb-4 hidden">Loading vehicles...</p>
+                <p data-vehicles-loading class="api-loading mb-4 hidden">Loading vehicles...</p>
 
-                <div data-vehicles-grid class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 transition-opacity"></div>
+                <div data-vehicles-skeleton class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-6">
+                    @for ($i = 0; $i < 3; $i++)
+                    <div class="glass-card rounded-3xl overflow-hidden">
+                        <div class="skeleton-card"></div>
+                        <div class="p-5 space-y-3">
+                            <div class="skeleton-line"></div>
+                            <div class="skeleton-line-sm"></div>
+                        </div>
+                    </div>
+                    @endfor
+                </div>
 
-                <div data-vehicles-empty class="hidden glass-card rounded-3xl p-12 text-center text-gray-500 dark:text-gray-400 col-span-full">
-                    <p class="text-lg font-medium">No vehicles found</p>
-                    <a href="{{ route('vehicles.create') }}" class="btn-primary mt-4 inline-flex">Add Vehicle</a>
+                <div data-vehicles-grid class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 transition-opacity hidden"></div>
+
+                <div data-vehicles-empty class="hidden empty-state col-span-full">
+                    <div class="empty-state-icon">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                    </div>
+                    <p class="text-lg font-semibold text-gray-900 dark:text-white">No vehicles found</p>
+                    <p class="text-sm text-gray-500 dark:text-slate-400 mt-2 mb-6">Add your first vehicle to start tracking maintenance.</p>
+                    <a href="{{ route('vehicles.create') }}" class="btn-primary inline-flex">Add Vehicle</a>
                 </div>
 
                 <div data-pagination class="mt-6 flex flex-wrap gap-2 justify-center"></div>

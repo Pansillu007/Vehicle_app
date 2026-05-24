@@ -1,3 +1,4 @@
+import { clearApiToken } from './auth.js';
 import { showToast } from './toast.js';
 
 export function clearFieldErrors(form) {
@@ -21,12 +22,35 @@ export function showFieldErrors(form, errors) {
             p.className = 'text-sm text-red-600 dark:text-red-400 mt-1';
             p.setAttribute('data-field-error', field);
             p.textContent = Array.isArray(messages) ? messages[0] : messages;
-            input.closest('div')?.appendChild(p);
+            (input.closest('div') || input.parentElement)?.appendChild(p);
         }
     });
 }
 
+function redirectToLogin() {
+    if (!window.location.pathname.includes('login')) {
+        window.location.href = '/login?session=expired';
+    }
+}
+
+window.addEventListener('api:unauthorized', () => {
+    showToast('Your session expired. Please sign in again.', 'error');
+    setTimeout(redirectToLogin, 800);
+});
+
 export function handleApiError(error, form = null) {
+    if (error?.code === 'ERR_CANCELED') {
+        return;
+    }
+
+    if (error.response?.status === 401) {
+        clearApiToken();
+        if (!form && !window.location.pathname.includes('login')) {
+            showToast('Your session expired. Please sign in again.', 'error');
+        }
+        return;
+    }
+
     if (error.response?.status === 422) {
         const errors = error.response.data?.errors;
         if (form && errors) {
@@ -41,8 +65,18 @@ export function handleApiError(error, form = null) {
         return;
     }
 
+    if (error.status === 401 || error.message?.includes('session')) {
+        showToast(error.message || 'Could not establish session. Please sign in again.', 'error');
+        return;
+    }
+
     if (error.response?.data?.message) {
         showToast(error.response.data.message, 'error');
+        return;
+    }
+
+    if (error.message) {
+        showToast(error.message, 'error');
         return;
     }
 

@@ -68,8 +68,52 @@
                 <h3 class="text-sm font-semibold text-gray-500 dark:text-slate-400 uppercase tracking-wider">Service alerts</h3>
             </div>
 
-            <livewire:dashboard-stats />
-
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6" data-dashboard-stats>
+                <div class="stat-card group">
+                    <div class="flex items-center gap-4">
+                        <div class="stat-card-icon bg-gradient-to-br from-blue-600 to-indigo-600">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+                        </div>
+                        <div class="min-w-0">
+                            <p class="text-sm text-gray-500 dark:text-slate-400">Total Vehicles</p>
+                            <p class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white" data-stat-vehicles>—</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="stat-card group">
+                    <div class="flex items-center gap-4">
+                        <div class="stat-card-icon bg-gradient-to-br from-cyan-600 to-blue-600">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                        </div>
+                        <div class="min-w-0">
+                            <p class="text-sm text-gray-500 dark:text-slate-400">Service Records</p>
+                            <p class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white" data-stat-services>—</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="stat-card group">
+                    <div class="flex items-center gap-4">
+                        <div class="stat-card-icon bg-gradient-to-br from-amber-600 to-orange-600">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </div>
+                        <div class="min-w-0">
+                            <p class="text-sm text-gray-500 dark:text-slate-400">Pending Reminders</p>
+                            <p class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white" data-stat-reminders>—</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="stat-card group">
+                    <div class="flex items-center gap-4">
+                        <div class="stat-card-icon bg-gradient-to-br from-emerald-600 to-teal-600">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </div>
+                        <div class="min-w-0">
+                            <p class="text-sm text-gray-500 dark:text-slate-400">Total Spend</p>
+                            <p class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white" data-stat-spend>—</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div class="glass-card rounded-3xl p-5 sm:p-6">
@@ -90,7 +134,15 @@
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <livewire:upcoming-reminders />
+                <div class="glass-card rounded-3xl p-5 sm:p-6" data-upcoming-reminders>
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Upcoming Maintenance</h3>
+                        <span class="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-xs font-bold rounded-full" data-upcoming-count>0 Pending</span>
+                    </div>
+                    <div class="space-y-3" data-upcoming-list>
+                        <p class="text-sm text-gray-500 dark:text-slate-400 py-8 text-center">Loading reminders...</p>
+                    </div>
+                </div>
 
                 <div class="lg:col-span-2 glass-card rounded-3xl p-5 sm:p-6">
                     <div class="flex items-center justify-between mb-4">
@@ -103,7 +155,15 @@
                 </div>
             </div>
 
-            <livewire:recent-activity />
+            <div class="glass-card rounded-3xl p-5 sm:p-6 transition-all duration-500" data-activity-section>
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Activity Timeline</h3>
+                    <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                </div>
+                <div class="relative space-y-6" data-activity-logs>
+                    <p class="text-sm text-gray-500 dark:text-slate-400 py-6 text-center">Loading activity...</p>
+                </div>
+            </div>
 
         </div>
     </div>

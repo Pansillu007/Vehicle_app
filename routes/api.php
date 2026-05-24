@@ -26,7 +26,13 @@ Route::middleware('throttle:10,1')->group(function () {
 Route::get('/docs', [ApiDocumentationController::class, 'index'])->name('api.docs');
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/user', fn (Request $request) => new UserResource($request->user()->loadCount('vehicles')));
+    Route::get('/user', function (Request $request) {
+        return response()->json([
+            'success' => true,
+            'message' => 'User loaded.',
+            'data' => (new UserResource($request->user()->loadCount('vehicles')))->resolve(),
+        ]);
+    });
     Route::post('/logout', [AuthController::class, 'logout']);
 
     Route::get('/dashboard', [ApiDashboardController::class, 'index'])->name('api.dashboard');

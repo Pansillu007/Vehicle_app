@@ -55,11 +55,15 @@
         <div class="alert-success">{{ $value }}</div>
     @endsession
 
+    <div data-session-expired class="hidden alert-error mb-4">
+        Your session expired. Please sign in again.
+    </div>
+
     <x-google-auth-button />
 
-    <form method="POST" action="{{ route('login') }}" class="space-y-5" x-data="{ loading: false }" @submit="loading = true">
-        @csrf
-
+    <form id="login-api-form" class="space-y-5" method="post" action="#" novalidate
+        x-data="{ loading: false }"
+        @submit.prevent>
         <div>
             <label for="email" class="form-label">Email Address</label>
             <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus

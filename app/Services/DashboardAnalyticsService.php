@@ -63,9 +63,18 @@ class DashboardAnalyticsService
         $reminders = $this->buildReminders($vehicles);
         $mostExpensiveVehicle = $this->mostExpensiveVehicle($vehicleIds);
 
+        $pendingReminders = $user->reminders()->pending()->count();
+        $upcomingReminders = $user->reminders()
+            ->pending()
+            ->with('vehicle')
+            ->orderBy('due_date')
+            ->take(5)
+            ->get();
+
         return [
             'totalVehicles' => $vehicles->count(),
             'totalServiceRecords' => $totalServiceRecords,
+            'pendingReminders' => $pendingReminders,
             'maintenanceCost' => $maintenanceCost,
             'chartData' => $chartData,
             'serviceDistribution' => $serviceDistribution,
@@ -73,6 +82,7 @@ class DashboardAnalyticsService
             'recentActivity' => $recentActivity,
             'activityLogs' => $activityLogs,
             'reminders' => $reminders,
+            'upcomingReminders' => $upcomingReminders,
             'mostExpensiveVehicle' => $mostExpensiveVehicle,
         ];
     }

@@ -42,7 +42,7 @@
 
     <x-google-auth-button />
 
-    <form method="POST" action="{{ route('register') }}" class="space-y-4"
+    <form id="register-api-form" class="space-y-4" method="post" action="#" novalidate
         x-data="{
             loading: false,
             showPassword: false,
@@ -66,9 +66,7 @@
                 this.strengthColor = colors[this.strength] || colors[0];
             }
         }"
-        @submit="loading = true">
-        @csrf
-
+        @submit.prevent>
         <div>
             <label for="name" class="form-label">Full Name</label>
             <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus autocomplete="name"

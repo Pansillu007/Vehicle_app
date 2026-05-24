@@ -1,0 +1,105 @@
+erDiagram
+    USERS ||--o{ VEHICLES : owns
+    USERS ||--o{ REMINDERS : has
+    USERS ||--o{ FUEL_LOGS : records
+    USERS ||--o{ ACTIVITY_LOGS : performs
+    USERS ||--o{ PERSONAL_ACCESS_TOKENS : "Sanctum tokens"
+    USERS ||--o{ PASSKEYS : has
+    USERS ||--o{ SESSIONS : has
+    USERS ||--o{ NOTIFICATIONS : receives
+    VEHICLES ||--o{ SERVICE_RECORDS : has
+    VEHICLES ||--o{ REMINDERS : "optional"
+    VEHICLES ||--o{ FUEL_LOGS : tracks
+
+    USERS {
+        bigint id PK
+        string name
+        string email UK
+        string role
+        string password
+        string google_id UK
+        string provider
+        bigint current_team_id
+        timestamps created_at
+    }
+
+    VEHICLES {
+        bigint id PK
+        bigint user_id FK
+        string name
+        string make
+        string model
+        string number_plate UK
+        int year
+        int mileage
+        string fuel_type
+        string vin_number UK
+        date next_service_due_date
+        timestamp deleted_at
+    }
+
+    SERVICE_RECORDS {
+        bigint id PK
+        bigint vehicle_id FK
+        string service_type
+        date service_date
+        decimal cost
+        int mileage
+        timestamp deleted_at
+    }
+
+    REMINDERS {
+        bigint id PK
+        bigint user_id FK
+        bigint vehicle_id FK
+        string title
+        date due_date
+        string status
+    }
+
+    FUEL_LOGS {
+        bigint id PK
+        bigint user_id FK
+        bigint vehicle_id FK
+        date date
+        decimal amount
+        decimal cost
+        int odometer
+    }
+
+    ACTIVITY_LOGS {
+        bigint id PK
+        bigint user_id FK
+        string action
+        string subject_type
+        bigint subject_id
+        json properties
+    }
+
+    PERSONAL_ACCESS_TOKENS {
+        bigint id PK
+        bigint tokenable_id FK
+        string tokenable_type
+        string name
+        string token UK
+    }
+
+    PASSKEYS {
+        bigint id PK
+        bigint user_id FK
+        string credential_id UK
+    }
+
+    SESSIONS {
+        string id PK
+        bigint user_id FK
+        int last_activity
+    }
+
+    NOTIFICATIONS {
+        uuid id PK
+        string notifiable_type
+        bigint notifiable_id
+        string type
+        timestamp read_at
+    }

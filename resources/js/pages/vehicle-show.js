@@ -1,6 +1,7 @@
 import { servicesApi } from '../api/services.js';
 import { downloadCsv } from '../api/export.js';
 import { handleApiError } from '../api/errors.js';
+import { createRequestGuard, withButtonLoading } from '../api/request.js';
 import { unwrapList } from '../api/response.js';
 import { showToast } from '../api/toast.js';
 
@@ -14,23 +15,35 @@ if (root) {
     const searchInput = root.querySelector('[data-service-search]');
     const typeInput = root.querySelector('[data-service-type]');
     const routes = JSON.parse(root.dataset.routes || '{}');
+    const guard = createRequestGuard();
 
     let debounce;
 
     async function load() {
+        const id = guard.next();
         loading?.classList.remove('hidden');
+        tbody?.classList.add('opacity-50');
+
         try {
             const response = await servicesApi.list(vehicleId, {
                 search: searchInput?.value || undefined,
                 type: typeInput?.value || undefined,
                 per_page: 50,
             });
+
+            if (!guard.isCurrent(id)) return;
+
             const { items } = unwrapList(response);
             render(items);
         } catch (e) {
-            handleApiError(e);
+            if (guard.isCurrent(id)) {
+                handleApiError(e);
+            }
         } finally {
-            loading?.classList.add('hidden');
+            if (guard.isCurrent(id)) {
+                loading?.classList.add('hidden');
+                tbody?.classList.remove('opacity-50');
+            }
         }
     }
 
@@ -52,9 +65,9 @@ if (root) {
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td class="whitespace-nowrap font-medium text-gray-900 dark:text-white">${s.service_date}</td>
-                <td><div class="font-semibold text-gray-900 dark:text-white">${esc(s.service_type)}</div><div class="text-sm text-gray-500">${esc(s.service_provider)}</div></td>
-                <td class="font-semibold">$${Number(s.cost).toFixed(2)}</td>
-                <td>${Number(s.mileage).toLocaleString()}</td>
+                <td><div class="font-semibold text-gray-900 dark:text-white">${esc(s.service_type)}</div><div class="text-sm text-gray-500 dark:text-slate-400">${esc(s.service_provider)}</div></td>
+                <td class="font-semibold whitespace-nowrap">$${Number(s.cost).toFixed(2)}</td>
+                <td class="hide-on-mobile">${Number(s.mileage).toLocaleString()}</td>
                 <td class="text-right space-x-2 whitespace-nowrap">
                     <a href="${routes.invoice.replace('__SID__', s.id)}" class="text-xs text-cyan-600 dark:text-cyan-400 hover:underline">PDF</a>
                     <a href="${routes.edit.replace('__SID__', s.id)}" class="text-xs text-blue-600 dark:text-blue-400 hover:underline">Edit</a>
@@ -68,13 +81,16 @@ if (root) {
         tbody.querySelectorAll('[data-delete-service]').forEach((btn) => {
             btn.addEventListener('click', async () => {
                 if (!confirm('Move this service record to trash?')) return;
-                try {
-                    await servicesApi.delete(vehicleId, btn.dataset.deleteService);
-                    showToast('Service record moved to trash.', 'success');
-                    load();
-                } catch (e) {
-                    handleApiError(e);
-                }
+
+                await withButtonLoading(btn, async () => {
+                    try {
+                        await servicesApi.delete(vehicleId, btn.dataset.deleteService);
+                        showToast('Service record moved to trash.', 'success');
+                        load();
+                    } catch (e) {
+                        handleApiError(e);
+                    }
+                });
             });
         });
     }
@@ -85,11 +101,14 @@ if (root) {
         return d.innerHTML;
     }
 
-    [searchInput, typeInput].forEach((el) => {
-        el?.addEventListener('input', () => {
-            clearTimeout(debounce);
-            debounce = setTimeout(load, 300);
-        });
+    searchInput?.addEventListener('input', () => {
+        clearTimeout(debounce);
+        debounce = setTimeout(load, 300);
+    });
+
+    typeInput?.addEventListener('input', () => {
+        clearTimeout(debounce);
+        debounce = setTimeout(load, 300);
     });
 
     root.querySelector('[data-export-services-csv]')?.addEventListener('click', () => {

@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\AdminVehicleController;
 use App\Http\Controllers\Auth\GoogleAuthController;
+use App\Http\Controllers\Auth\SessionBootstrapController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PdfExportController;
@@ -25,6 +26,17 @@ Route::middleware('guest')->group(function () {
     Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('auth.google.redirect');
     Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('auth.google.callback');
 });
+
+Route::post('/auth/session/bootstrap', [SessionBootstrapController::class, 'store'])
+    ->middleware('throttle:10,1')
+    ->name('auth.session.bootstrap');
+
+Route::get('/auth/session/check', function () {
+    return response()->json([
+        'success' => auth()->check(),
+        'message' => auth()->check() ? 'Session active.' : 'Unauthenticated.',
+    ], auth()->check() ? 200 : 401);
+})->name('auth.session.check');
 
 Route::middleware([
     'auth',

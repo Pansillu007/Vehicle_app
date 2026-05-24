@@ -7,11 +7,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ServiceRecordResource;
 use App\Models\ServiceRecord;
 use App\Models\Vehicle;
-use App\Notifications\ServiceDueNotification;
 use App\Services\ActivityLogger;
 use App\Services\ServiceReminderService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class ApiServiceController extends Controller
 {
@@ -50,7 +48,6 @@ class ApiServiceController extends Controller
         $this->reminders->updateVehicleSchedule($vehicle->fresh(), $record);
 
         ActivityLogger::log('service.created', 'Service "'.$record->service_type.'" added to '.$vehicle->name, $record);
-        Auth::user()->notify(new ServiceDueNotification($vehicle->fresh()));
 
         return $this->apiResource(
             new ServiceRecordResource($record),
