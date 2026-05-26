@@ -37,14 +37,8 @@ bootstrapApiTokenFromMeta();
 bindLogoutTokenClear();
 resetUnauthorizedGuard();
 
-const pageModules = [
-    './pages/dashboard.js',
-    './pages/vehicles-index.js',
-    './pages/vehicle-form.js',
-    './pages/vehicle-show.js',
-    './pages/service-form.js',
-    './pages/profile-forms.js',
-    './pages/trash-index.js',
-];
+const pages = import.meta.glob('./pages/*.js');
 
-await Promise.all(pageModules.map((path) => import(path)));
+for (const path in pages) {
+    await pages[path]();
+}

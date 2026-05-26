@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bearer Token Demo</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 800px; margin: 2rem auto; }
+    label { display: block; margin-top: 1rem; }
+    input { width: 100%; padding: 0.5rem; margin-top: 0.25rem; }
+    button { margin-top: 1rem; padding: 0.75rem 1rem; }
+    textarea { width: 100%; height: 240px; margin-top: 1rem; }
+    .token { word-break: break-all; background: #f6f8fa; padding: 0.75rem; margin-top: 0.5rem; }
+  </style>
+</head>
+<body>
+  <h1>Bearer Token Demo</h1>
+
+  <section>
+    <h2>Login</h2>
+    <label>
+      Email
+      <input id="email" type="email" value="demo@vehicleapp.com">
+    </label>
+    <label>
+      Password
+      <input id="password" type="password" value="password123">
+    </label>
+    <button id="loginBtn">Login and get token</button>
+    <div id="tokenArea" class="token" style="display:none;">
+      <strong>Bearer Token:</strong>
+      <div id="tokenText"></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Protected request</h2>
+    <button id="vehiclesBtn" disabled>Fetch /api/vehicles</button>
+  </section>
+
+  <section>
+    <h2>Output</h2>
+    <textarea id="output" readonly></textarea>
+  </section>
+
+  <script>
+    const output = document.getElementById('output');
+    const loginBtn = document.getElementById('loginBtn');
+    const vehiclesBtn = document.getElementById('vehiclesBtn');
+    const tokenArea = document.getElementById('tokenArea');
+    const tokenText = document.getElementById('tokenText');
+
+    let bearerToken = '';
+
+    function log(message) {
+      output.value += message + '\\n';
+      output.scrollTop = output.scrollHeight;
+    }
+
+    async function login() {
+      output.value = '';
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      const response = await fetch('http://localhost:8000/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+
+      const json = await response.json();
+      log('Login status: ' + response.status);
+      log(JSON.stringify(json, null, 2));
+
+      if (json.data && json.data.token) {
+        bearerToken = json.data.token;
+        tokenText.textContent = bearerToken;
+        tokenArea.style.display = 'block';
+        vehiclesBtn.disabled = false;
+        log('Bearer token received and ready to use.');
+      } else {
+        log('No token returned. Check API response.');
+      }
+    }
+
+    async function fetchVehicles() {
+      if (!bearerToken) {
+        log('No bearer token available.');
+        return;
+      }
+
+      const response = await fetch('http://localhost:8000/api/vehicles', {
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ' + bearerToken
+        }
+      });
+
+      const json = await response.json();
+      log('Protected request status: ' + response.status);
+      log(JSON.stringify(json, null, 2));
+    }
+
+    loginBtn.addEventListener('click', login);
+    vehiclesBtn.addEventListener('click', fetchVehicles);
+  </script>
+</body>
+</html>

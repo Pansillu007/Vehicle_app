@@ -91,7 +91,7 @@ if (root) {
                     <div class="flex flex-wrap gap-2 mt-3">
                         <a href="${routes.show.replace('__ID__', v.id)}" class="btn-primary text-xs py-2 px-3">View</a>
                         <a href="${routes.edit.replace('__ID__', v.id)}" class="btn-secondary text-xs py-2 px-3">Edit</a>
-                        <button type="button" data-delete-id="${v.id}" class="btn-danger text-xs py-2 px-3">Delete</button>
+                        <button type="button" data-delete-id="${v.id}" class="btn-secondary text-xs py-2 px-3R">Delete</button>
                     </div>
                 </div>`;
             grid.appendChild(card);

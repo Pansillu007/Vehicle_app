@@ -11,6 +11,9 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\ServiceController;
+
+
 
 
 
@@ -41,6 +44,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/dashboard/stats', [ApiDashboardController::class, 'stats']);
     Route::get('/dashboard', [ApiDashboardController::class, 'index'])->name('api.dashboard');
+    
 
     Route::get('/export/vehicles', [ApiExportController::class, 'vehicles'])->name('api.export.vehicles');
     Route::get('/export/vehicles/{vehicle}/services', [ApiExportController::class, 'vehicleServices'])->name('api.export.vehicle-services');
