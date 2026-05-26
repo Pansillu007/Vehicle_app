@@ -11,6 +11,8 @@ class ApiDashboardController extends Controller
 {
     use RespondsWithApiJson;
 
+
+    
     public function __construct(
         protected DashboardAnalyticsService $analytics
     ) {}

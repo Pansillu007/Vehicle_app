@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 
 
+
 /*
 |--------------------------------------------------------------------------
 | VehiclePro JSON API — all CRUD and data mutations (Sanctum Bearer tokens)
@@ -38,7 +39,7 @@ Route::middleware('auth:sanctum')->group(function () {
         ]);
     });
     Route::post('/logout', [AuthController::class, 'logout']);
-
+    Route::get('/dashboard/stats', [ApiDashboardController::class, 'stats']);
     Route::get('/dashboard', [ApiDashboardController::class, 'index'])->name('api.dashboard');
 
     Route::get('/export/vehicles', [ApiExportController::class, 'vehicles'])->name('api.export.vehicles');
