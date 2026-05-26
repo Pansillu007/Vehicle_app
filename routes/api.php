@@ -12,6 +12,9 @@ use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+
+
+
 /*
 |--------------------------------------------------------------------------
 | VehiclePro JSON API — all CRUD and data mutations (Sanctum Bearer tokens)
@@ -21,6 +24,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('throttle:10,1')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/auth/google', [AuthController::class, 'googleLogin']);
 });
 
 Route::get('/docs', [ApiDocumentationController::class, 'index'])->name('api.docs');

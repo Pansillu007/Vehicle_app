@@ -97,4 +97,32 @@ class AuthController extends Controller
             'message' => 'Logged out successfully',
         ]);
     }
+public function googleLogin(Request $request)
+{
+    $request->validate([
+        'email' => 'required|email',
+        'name' => 'required|string',
+    ]);
+
+    $user = User::firstOrCreate(
+        ['email' => $request->email],
+        [
+            'name' => $request->name,
+            'password' => Hash::make(\Illuminate\Support\Str::random(24)),
+            'role' => UserRole::User,
+        ]
+    );
+
+    $token = $this->tokens->issue($user);
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Google login successful',
+        'data' => [
+            'user' => (new UserResource($user))->resolve(),
+            'token' => $token,
+        ],
+    ]);
 }
+    }
+
