@@ -39,7 +39,7 @@ if (root) {
         try {
             const response = await vehiclesApi.list({
                 page,
-                search: searchInput?.value || undefined,
+                search: searchInput?.value?.trim() || '',
                 fuel_type: fuelSelect?.value || undefined,
                 sort: sortSelect?.value || 'latest',
             });
@@ -152,7 +152,7 @@ if (root) {
 
     root.querySelector('[data-export-vehicles-csv]')?.addEventListener('click', () => {
         downloadCsv('/export/vehicles', `vehicles-${new Date().toISOString().slice(0, 10)}.csv`, {
-            search: searchInput?.value || undefined,
+            search: searchInput?.value?.trim() || '',
             fuel_type: fuelSelect?.value || undefined,
             sort: sortSelect?.value || 'latest',
         });

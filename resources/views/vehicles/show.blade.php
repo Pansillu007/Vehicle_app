@@ -10,8 +10,6 @@
             </div>
             <div class="flex flex-wrap gap-2">
                 <a href="{{ route('vehicles.export', $vehicle) }}" class="btn-secondary text-sm py-2.5">Export PDF</a>
-                <a href="{{ route('vehicles.services.export', $vehicle) }}" class="btn-secondary text-sm py-2.5">Services PDF</a>
-                <button type="button" data-export-services-csv data-vehicle-id="{{ $vehicle->id }}" class="btn-secondary text-sm py-2.5">Services CSV</button>
                 <a href="{{ route('vehicles.services.create', $vehicle) }}" class="btn-primary text-sm py-2.5">Add Service</a>
                 <a href="{{ route('vehicles.edit', $vehicle) }}" class="btn-secondary text-sm py-2.5">Edit</a>
             </div>

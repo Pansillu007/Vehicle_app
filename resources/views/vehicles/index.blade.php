@@ -6,7 +6,6 @@
                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Search, filter, and manage your fleet via API</p>
             </div>
             <div class="flex flex-wrap gap-2">
-                <button type="button" data-export-vehicles-csv class="btn-secondary text-sm">Export CSV</button>
                 <a href="{{ route('trash.index') }}" class="btn-secondary text-sm">Trash</a>
                 <a href="{{ route('vehicles.create') }}" class="btn-primary shrink-0">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>

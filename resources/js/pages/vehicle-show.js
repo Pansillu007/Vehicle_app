@@ -26,7 +26,7 @@ if (root) {
 
         try {
             const response = await servicesApi.list(vehicleId, {
-                search: searchInput?.value || undefined,
+                search: searchInput?.value?.trim() || '',
                 type: typeInput?.value || undefined,
                 per_page: 50,
             });
