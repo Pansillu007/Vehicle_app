@@ -12,11 +12,13 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
 
-    ->withMiddleware(function ($middleware) {
-    //
+    ->withMiddleware(function (Middleware $middleware): void {
+    $middleware->append(\App\Http\Middleware\SecurityHeaders::class);
 })
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->statefulApi();
+
+    
 
         $middleware->alias([
             'admin' => \App\Http\Middleware\EnsureUserIsAdmin::class,
@@ -26,5 +28,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions(function (Exceptions $exceptions): void {
         //
     })->create();
+
+    
 
     
