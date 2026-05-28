@@ -33,7 +33,7 @@ Route::middleware('throttle:10,1')->group(function () {
 
 Route::get('/docs', [ApiDocumentationController::class, 'index'])->name('api.docs');
 
-Route::middleware(['auth:sanctum', 'throttle:10,1'])->group(function () {
+Route::middleware(['auth:api', 'throttle:10,1'])->group(function () {
     Route::get('/user', function (Request $request) {
         return response()->json([
             'success' => true,
